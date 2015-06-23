@@ -1,0 +1,6 @@
+{
+ "uuid": "nvidia-prime@cinnamon.org",
+ "name": "NVIDIA Prime",
+ "description": "Shows which GPU is currently active and lets you switch to the other one",
+ "max-instances": -1
+}
