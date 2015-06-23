@@ -1,3 +1,10 @@
+nvidia-prime-applet (1.0.1) rafaela; urgency=medium
+
+  * Added a systray application for MATE/Xfce/KDE
+  * Made the xdg autostart visible and more explanatory
+
+ -- Clement Lefebvre <root@linuxmint.com>  Tue, 23 Jun 2015 17:29:36 +0200
+
 nvidia-prime-applet (1.0.0) rafaela; urgency=low
 
   * Initial release
