@@ -16,7 +16,7 @@ class Tray:
         self.icon.set_title("nvidia-prime")
         self.icon.connect("popup-menu", self.on_popup_menu)
         self.icon.connect("activate", self.on_activate)
-       
+
         active_gpu = commands.getoutput("prime-select query")
         if (active_gpu == "nvidia"):
             self.icon.set_from_icon_name("prime-tray-nvidia")
@@ -59,11 +59,9 @@ if __name__ == "__main__":
 
     # If nvidia-prime isn't installed or isn't supported, exit cleanly
     if not (os.path.exists("/usr/bin/nvidia-settings") and os.path.exists("/usr/bin/prime-select")):
-        print "nvidia-settings or nvidia-prime are not installed"
         sys.exit(0)
 
     if commands.getoutput("prime-supported 2>/dev/null") != "yes":
-        print "nvidia-prime is not supported"
         sys.exit(0)
 
     Tray()
