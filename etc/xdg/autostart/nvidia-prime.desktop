@@ -1,0 +1,10 @@
+[Desktop Entry]
+
+Name=NVIDIA Prime
+Comment=NVIDIA Prime tray icon support
+Exec=/usr/lib/nvidia-prime-applet/nvidia-prime
+Terminal=false
+Type=Application
+Categories=GTK;GNOME;Settings;
+StartupNotify=false
+NoDisplay=true
