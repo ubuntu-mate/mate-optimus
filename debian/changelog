@@ -1,3 +1,9 @@
+nvidia-prime-applet (1.0.3) rafaela; urgency=medium
+
+  * Removed unecessary imports
+
+ -- Clement Lefebvre <root@linuxmint.com>  Tue, 14 Jul 2015 13:58:32 +0200
+
 nvidia-prime-applet (1.0.2) rafaela; urgency=medium
 
   * Don't write to stdout (it ends up in .xsession-errors.. non-NVIDIA users don't want to see PRIME errors/debug info)
