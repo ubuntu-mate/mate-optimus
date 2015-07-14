@@ -2,7 +2,7 @@
 
 import sys, os
 import gettext
-from gi.repository import Gtk, Gdk, GnomeBluetooth, Gio
+from gi.repository import Gtk, Gdk
 import subprocess
 import commands
 
