@@ -1,2 +1,1 @@
-
-Applets for NVIDIA Prime
+NVIDIA Optimus applet
