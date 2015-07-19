@@ -1,12 +1,13 @@
-Source: nvidia-prime-applet
+Source: optimus-applet
 Section: admin
 Priority: optional
-Maintainer: Clement Lefebvre <root@linuxmint.com>
+Maintainer: Martin Wimpress <code@flexion.org>
 Build-Depends: debhelper (>= 9), python
-Standards-Version: 3.9.5
+Standards-Version: 3.9.6
 
-Package: nvidia-prime-applet
+Package: optimus-applet
 Architecture: all
 Depends: python (>= 2.4), python (<< 3)
-Description: An applet for NVIDIA Prime
- Displays the active GPU and lets you switch to the other one on NVIDIA Optimus cards.
+Description: NVIDIA Optimus applet
+ Displays the active GPU and lets you switch between the Intel and
+ nvidia GPUs on NVIDIA Optimus equipped computers.

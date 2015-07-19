@@ -1,25 +1,5 @@
-nvidia-prime-applet (1.0.3) rafaela; urgency=medium
-
-  * Removed unecessary imports
-
- -- Clement Lefebvre <root@linuxmint.com>  Tue, 14 Jul 2015 13:58:32 +0200
-
-nvidia-prime-applet (1.0.2) rafaela; urgency=medium
-
-  * Don't write to stdout (it ends up in .xsession-errors.. non-NVIDIA users don't want to see PRIME errors/debug info)
-
- -- Clement Lefebvre <root@linuxmint.com>  Tue, 23 Jun 2015 18:39:04 +0200
-
-nvidia-prime-applet (1.0.1) rafaela; urgency=medium
-
-  * Added a systray application for MATE/Xfce/KDE
-  * Made the xdg autostart visible and more explanatory
-
- -- Clement Lefebvre <root@linuxmint.com>  Tue, 23 Jun 2015 17:29:36 +0200
-
-nvidia-prime-applet (1.0.0) rafaela; urgency=low
+optimus-applet (1.0.0~vivid1) vivid; urgency=low
 
   * Initial release
 
- -- Clement Lefebvre <root@linuxmint.com>  Tue,  23 Jun 2015 16:28:00 +0000
-
+ -- Martin Wimpress <code@flexion.org>  Sun,  19 Jul 2015 22:41:21 +0100

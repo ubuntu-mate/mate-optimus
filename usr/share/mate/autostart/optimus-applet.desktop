@@ -1,9 +1,8 @@
 [Desktop Entry]
-
-Name=Support for NVIDIA Prime
+Name=NVIDIA Optimus
 Comment=Shows a tray icon when a compatible NVIDIA Optimus graphics card is detected
-Exec=/usr/lib/nvidia-prime-applet/nvidia-prime
-Icon=prime-tray-nvidia
+Exec=/usr/lib/optimus-applet/optimus-applet
+Icon=optimus-tray-nvidia
 Terminal=false
 Type=Application
 Categories=GTK;GNOME;Settings;
