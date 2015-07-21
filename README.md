@@ -1,1 +1,1 @@
-NVIDIA Optimus applet
+NVIDIA Optimus applet for MATE.
