@@ -1,14 +1,15 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: optimus-applet
+Upstream-Name: mate-optimus
 Upstream-Contact: Martin Wimpress <code@flexion.org>
-Source: https://bitbucket.org/ubuntu-mate/optimus-applet
+Source: https://bitbucket.org/ubuntu-mate/mate-optimus
 
 Files: *
 Copyright: 2015 Clement Lefebvre <root@linuxmint.com>
            2015 Martin Wimpress <code@flexion.org>
 License: GPL-3+
 
-Files: usr/share/pixmaps/optimus-tray-nvidia.png
+Files: usr/share/pixmaps/optimus-tray-intel.png
+       usr/share/pixmaps/optimus-tray-nvidia.png
 Copyright: 2004-2014 NVIDIA Corporation
 License: GPL-2
 

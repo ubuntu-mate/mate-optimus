@@ -1,5 +1,5 @@
-optimus-applet (1.0.0) wily; urgency=low
+mate-optimus (1.0.0) wily; urgency=medium
 
-  * Initial release
+  * Initial release. Closes (LP:# )
 
  -- Martin Wimpress <code@flexion.org>  Sun,  19 Jul 2015 22:41:21 +0100
