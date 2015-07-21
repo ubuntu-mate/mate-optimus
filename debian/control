@@ -2,12 +2,14 @@ Source: optimus-applet
 Section: admin
 Priority: optional
 Maintainer: Martin Wimpress <code@flexion.org>
-Build-Depends: debhelper (>= 9), python3
+Build-Depends: debhelper (>= 9),
+               python3,
 Standards-Version: 3.9.6
 
 Package: optimus-applet
 Architecture: all
-Depends: python3
+Depends: python3,
+         ${misc:Depends},
 Description: NVIDIA Optimus applet
  Displays the active GPU and lets you switch between the Intel and
  nvidia GPUs on NVIDIA Optimus equipped computers.
