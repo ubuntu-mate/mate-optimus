@@ -78,7 +78,6 @@ if __name__ == "__main__":
 
     process = subprocess.Popen(['prime-supported'], stdout=PIPE, stderr=DEVNULL)
     out, err = process.communicate()
-    devnull.close()
     prime_supported = out.decode('utf-8')
     if 'yes' not in prime_supported:
         sys.exit(0)
