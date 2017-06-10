@@ -13,20 +13,64 @@ from gi.repository import Gdk
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
+try:
+    gi.require_version('AppIndicator3', '0.1')
+    from gi.repository import AppIndicator3
+    indicator_available = True
+except:
+    indicator_available = False
+
 # i18n
 gettext.install("mate-optimus", "/usr/share/locale")
 
+def get_active_gpu():
+    process = subprocess.Popen(['prime-select', 'query'], stdout=PIPE)
+    out, err = process.communicate()
+    return out.decode('utf-8')
+
+class Indicator:
+    def __init__(self):
+        self.icon = AppIndicator3.Indicator.new('mate-optimus', '', AppIndicator3.IndicatorCategory.APPLICATION_STATUS)
+        self.icon.set_status(AppIndicator3.IndicatorStatus.ACTIVE)
+
+        active_gpu = get_active_gpu()
+
+        if ('nvidia' in active_gpu):
+            self.icon.set_icon("optimus-tray-nvidia")
+            self.icon.set_title(_("Active graphics card: NVIDIA"))
+        elif ('intel' in active_gpu):
+            self.icon.set_icon("optimus-tray-intel")
+            self.icon.set_title(_("Active graphics card: Intel"))
+        else:
+            self.icon.set_icon("dialog-error")
+            self.icon.set_title(_("Active graphics card: " + active_gpu))
+
+        menu = Gtk.Menu()
+        item = Gtk.MenuItem(label=_("NVIDIA Settings"))
+        item.connect("activate", self.run_nvidia_settings)
+        menu.append(item)
+        menu.append(Gtk.SeparatorMenuItem())
+        item = Gtk.MenuItem(label=_("Quit"))
+        item.connect("activate", self.terminate)
+        menu.append(item)
+        menu.show_all()
+        self.icon.set_menu(menu)
+
+    def run_nvidia_settings (self, arg=None):
+        subprocess.Popen(["nvidia-settings", "-page", "PRIME Profiles"])
+
+    def terminate(self, window = None, data = None):
+        Gtk.main_quit()
+
+
 class Tray:
     def __init__(self):
-
         self.icon = Gtk.StatusIcon()
         self.icon.set_title("mate-optimus")
         self.icon.connect("popup-menu", self.on_popup_menu)
         self.icon.connect("activate", self.on_activate)
 
-        process = subprocess.Popen(['prime-select', 'query'], stdout=PIPE)
-        out, err = process.communicate()
-        active_gpu = out.decode('utf-8')
+        active_gpu = get_active_gpu()
 
         if ('nvidia' in active_gpu):
             self.icon.set_from_icon_name("optimus-tray-nvidia")
@@ -82,5 +126,9 @@ if __name__ == "__main__":
     if 'yes' not in prime_supported:
         sys.exit(0)
 
-    Tray()
+    if indicator_available:
+        Indicator()
+    else:
+        Tray()
+
     Gtk.main()
