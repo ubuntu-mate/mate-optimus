@@ -3,6 +3,7 @@
 import gettext
 import gi
 import os
+import setproctitle
 import subprocess
 import sys
 from subprocess import DEVNULL, PIPE
@@ -12,6 +13,9 @@ from gi.repository import Gdk
 
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
+
+gi.require_version('Notify', '0.7')
+from gi.repository import Notify
 
 try:
     gi.require_version('AppIndicator3', '0.1')
@@ -28,28 +32,46 @@ def get_active_gpu():
     out, err = process.communicate()
     return out.decode('utf-8')
 
+def gpu_switch_notify(gpu):
+    Notify.init(_('GPU Configuration Switched'))
+    notify=Notify.Notification.new (_('GPU Configuration Switched'),_('Log out and log back in to complete the enablement of the default GPU to ' + gpu), 'dialog-information')
+    notify.show()
+
 class Indicator:
     def __init__(self):
         self.icon = AppIndicator3.Indicator.new('mate-optimus', '', AppIndicator3.IndicatorCategory.APPLICATION_STATUS)
         self.icon.set_status(AppIndicator3.IndicatorStatus.ACTIVE)
 
-        active_gpu = get_active_gpu()
+        menu = Gtk.Menu()
 
-        if ('nvidia' in active_gpu):
+        self.active_gpu = get_active_gpu()
+
+        if ('nvidia' in self.active_gpu):
             self.icon.set_icon("optimus-tray-nvidia")
             self.icon.set_title(_("Active graphics card: NVIDIA"))
-        elif ('intel' in active_gpu):
+        elif ('intel' in self.active_gpu):
             self.icon.set_icon("optimus-tray-intel")
             self.icon.set_title(_("Active graphics card: Intel"))
         else:
-            self.icon.set_icon("dialog-error")
-            self.icon.set_title(_("Active graphics card: " + active_gpu))
+            self.icon.set_icon("optimus-tray-intel")
+            self.icon.set_title(_("Active graphics card: " + self.active_gpu))
 
-        menu = Gtk.Menu()
+        if 'nvidia' not in self.active_gpu:
+            item = Gtk.MenuItem(label=_("Switch to nvidia"))
+            item.connect("activate", self.switch_to_nvidia)
+            menu.append(item)
+
+        if 'intel' not in self.active_gpu:
+            item = Gtk.MenuItem(label=_("Switch to Intel"))
+            item.connect("activate", self.switch_to_intel)
+            menu.append(item)
+
         item = Gtk.MenuItem(label=_("NVIDIA Settings"))
         item.connect("activate", self.run_nvidia_settings)
         menu.append(item)
+
         menu.append(Gtk.SeparatorMenuItem())
+
         item = Gtk.MenuItem(label=_("Quit"))
         item.connect("activate", self.terminate)
         menu.append(item)
@@ -58,6 +80,14 @@ class Indicator:
 
     def run_nvidia_settings (self, arg=None):
         subprocess.Popen(["nvidia-settings", "-page", "PRIME Profiles"])
+
+    def switch_to_nvidia (self, arg=None):
+        subprocess.call(["pkexec", "prime-select", "nvidia"])
+        gpu_switch_notify('nvidia')
+
+    def switch_to_intel (self, arg=None):
+        subprocess.call(["pkexec", "prime-select", "intel"])
+        gpu_switch_notify('Intel')
 
     def terminate(self, window = None, data = None):
         Gtk.main_quit()
@@ -70,23 +100,31 @@ class Tray:
         self.icon.connect("popup-menu", self.on_popup_menu)
         self.icon.connect("activate", self.on_activate)
 
-        active_gpu = get_active_gpu()
+        self.active_gpu = get_active_gpu()
 
-        if ('nvidia' in active_gpu):
+        if ('nvidia' in self.active_gpu):
             self.icon.set_from_icon_name("optimus-tray-nvidia")
             self.icon.set_tooltip_text(_("Active graphics card: NVIDIA"))
-        elif ('intel' in active_gpu):
+        elif ('intel' in self.active_gpu):
             self.icon.set_from_icon_name("optimus-tray-intel")
             self.icon.set_tooltip_text(_("Active graphics card: Intel"))
         else:
-            self.icon.set_from_icon_name("dialog-error")
-            self.icon.set_tooltip_text(_("Active graphics card: " + active_gpu))
+            self.icon.set_from_icon_name("optimus-tray-intel")
+            self.icon.set_tooltip_text(_("Active graphics card: " + self.active_gpu))
 
     def on_activate(self, icon, data=None):
         self.run_nvidia_settings();
 
-    def run_nvidia_settings (self, arg=None):
+    def run_nvidia_settings(self, arg=None):
         subprocess.Popen(["nvidia-settings", "-page", "PRIME Profiles"])
+
+    def switch_to_nvidia(self, arg=None):
+        subprocess.call(["pkexec", "prime-select", "nvidia"])
+        gpu_switch_notify('nvidia')
+
+    def switch_to_intel(self, arg=None):
+        subprocess.call(["pkexec", "prime-select", "intel"])
+        gpu_switch_notify('Intel')
 
     def on_popup_menu(self, icon, button, time, data = None):
         menu = Gtk.Menu()
@@ -96,6 +134,16 @@ class Tray:
                 return Gtk.StatusIcon.position_menu(menu, x, y, icon)
             except (AttributeError, TypeError):
                 return Gtk.StatusIcon.position_menu(menu, icon)
+
+        if 'nvidia' not in self.active_gpu:
+            item = Gtk.MenuItem(label=_("Switch to nvidia"))
+            item.connect("activate", self.switch_to_nvidia)
+            menu.append(item)
+
+        if 'intel' not in self.active_gpu:
+            item = Gtk.MenuItem(label=_("Switch to Intel"))
+            item.connect("activate", self.switch_to_intel)
+            menu.append(item)
 
         item = Gtk.MenuItem(label=_("NVIDIA Settings"))
         item.connect("activate", self.run_nvidia_settings)
@@ -125,6 +173,8 @@ if __name__ == "__main__":
     prime_supported = out.decode('utf-8')
     if 'yes' not in prime_supported:
         sys.exit(0)
+
+    setproctitle.setproctitle('mate-optimus')
 
     if indicator_available:
         Indicator()
