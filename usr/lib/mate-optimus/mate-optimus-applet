@@ -27,15 +27,34 @@ except:
 # i18n
 gettext.install("mate-optimus", "/usr/share/locale")
 
+def nvidia_present():
+    pci_vga = ''
+
+    try:
+        lspci = subprocess.Popen(["lspci", "-nn"], stdout=subprocess.PIPE)
+        pci_vga = subprocess.check_output(["grep", "-i", "VGA"], stdin=lspci.stdout)
+    except subprocess.CalledProcessError:
+        print('Error: Problem retreiving VGA device info!')
+    except OSError:
+        print('Error: Command `lspci` not available!')
+
+    if pci_vga and 'nvidia' in pci_vga.lower().decode('utf-8'):
+        return True
+    else:
+        return False
+
+
 def get_active_gpu():
     process = subprocess.Popen(['prime-select', 'query'], stdout=PIPE)
     out, err = process.communicate()
     return out.decode('utf-8')
 
+
 def gpu_switch_notify(gpu):
     Notify.init(_('GPU Configuration Switched'))
     notify=Notify.Notification.new (_('GPU Configuration Switched'),_('Log out and log back in to complete the enablement of the default GPU to ' + gpu), 'dialog-information')
     notify.show()
+
 
 class Indicator:
     def __init__(self):
@@ -56,12 +75,12 @@ class Indicator:
             self.icon.set_icon("optimus-tray-intel")
             self.icon.set_title(_("Active graphics card: " + self.active_gpu))
 
-        if 'nvidia' not in self.active_gpu:
+        if 'intel' in self.active_gpu:
             item = Gtk.MenuItem(label=_("Switch to nvidia"))
             item.connect("activate", self.switch_to_nvidia)
             menu.append(item)
 
-        if 'intel' not in self.active_gpu:
+        if 'nvidia' in self.active_gpu:
             item = Gtk.MenuItem(label=_("Switch to Intel"))
             item.connect("activate", self.switch_to_intel)
             menu.append(item)
@@ -78,14 +97,14 @@ class Indicator:
         menu.show_all()
         self.icon.set_menu(menu)
 
-    def run_nvidia_settings (self, arg=None):
+    def run_nvidia_settings(self, arg=None):
         subprocess.Popen(["nvidia-settings", "-page", "PRIME Profiles"])
 
-    def switch_to_nvidia (self, arg=None):
+    def switch_to_nvidia(self, arg=None):
         subprocess.call(["pkexec", "prime-select", "nvidia"])
         gpu_switch_notify('nvidia')
 
-    def switch_to_intel (self, arg=None):
+    def switch_to_intel(self, arg=None):
         subprocess.call(["pkexec", "prime-select", "intel"])
         gpu_switch_notify('Intel')
 
@@ -135,12 +154,12 @@ class Tray:
             except (AttributeError, TypeError):
                 return Gtk.StatusIcon.position_menu(menu, icon)
 
-        if 'nvidia' not in self.active_gpu:
+        if 'intel' in self.active_gpu:
             item = Gtk.MenuItem(label=_("Switch to nvidia"))
             item.connect("activate", self.switch_to_nvidia)
             menu.append(item)
 
-        if 'intel' not in self.active_gpu:
+        if 'nvidia' in self.active_gpu:
             item = Gtk.MenuItem(label=_("Switch to Intel"))
             item.connect("activate", self.switch_to_intel)
             menu.append(item)
@@ -164,6 +183,10 @@ class Tray:
         Gtk.main_quit()
 
 if __name__ == "__main__":
+    # Make sure an nvidia card is present.
+    if not nvidia_present():
+        sys.exit(0)
+
     # If NVIDIA Prime is not installed or isn't supported then exit.
     if not (os.path.exists("/usr/bin/nvidia-settings") and os.path.exists("/usr/bin/prime-select")):
         sys.exit(0)
