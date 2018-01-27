@@ -27,23 +27,6 @@ except:
 # i18n
 gettext.install("mate-optimus", "/usr/share/locale")
 
-def nvidia_present():
-    pci_vga = ''
-
-    try:
-        lspci = subprocess.Popen(["lspci", "-nn"], stdout=subprocess.PIPE)
-        pci_vga = subprocess.check_output(["grep", "-i", "VGA"], stdin=lspci.stdout)
-    except subprocess.CalledProcessError:
-        print('Error: Problem retreiving VGA device info!')
-    except OSError:
-        print('Error: Command `lspci` not available!')
-
-    if pci_vga and 'nvidia' in pci_vga.lower().decode('utf-8'):
-        return True
-    else:
-        return False
-
-
 def get_active_gpu():
     process = subprocess.Popen(['prime-select', 'query'], stdout=PIPE)
     out, err = process.communicate()
