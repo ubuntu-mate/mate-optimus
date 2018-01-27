@@ -183,21 +183,19 @@ class Tray:
         Gtk.main_quit()
 
 if __name__ == "__main__":
-    # Make sure an nvidia card is present.
-    if not nvidia_present():
-        sys.exit(0)
+    setproctitle.setproctitle('mate-optimus')
 
     # If NVIDIA Prime is not installed or isn't supported then exit.
     if not (os.path.exists("/usr/bin/nvidia-settings") and os.path.exists("/usr/bin/prime-select")):
+        print('No nvidia-settings and prime-select detected.')
         sys.exit(0)
 
     process = subprocess.Popen(['prime-supported'], stdout=PIPE, stderr=DEVNULL)
     out, err = process.communicate()
     prime_supported = out.decode('utf-8')
     if 'yes' not in prime_supported:
+        print('Prime not supported.')
         sys.exit(0)
-
-    setproctitle.setproctitle('mate-optimus')
 
     if indicator_available:
         Indicator()
