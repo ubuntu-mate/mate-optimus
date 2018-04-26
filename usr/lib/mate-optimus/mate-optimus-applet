@@ -35,7 +35,7 @@ def get_active_gpu():
 
 def gpu_switch_notify(gpu):
     Notify.init(_('GPU Configuration Switched'))
-    notify=Notify.Notification.new (_('GPU Configuration Switched'),_('Log out and log back in to complete the enablement of the default GPU to ' + gpu), 'dialog-information')
+    notify=Notify.Notification.new (_('GPU Configuration Switched'),_('Please reboot to complete the enablement of the ' + gpu + ' GPU.'), 'dialog-information')
     notify.show()
 
 
@@ -59,7 +59,7 @@ class Indicator:
             self.icon.set_title(_("Active graphics card: " + self.active_gpu))
 
         if 'intel' in self.active_gpu:
-            item = Gtk.MenuItem(label=_("Switch to nvidia"))
+            item = Gtk.MenuItem(label=_("Switch to NVIDIA"))
             item.connect("activate", self.switch_to_nvidia)
             menu.append(item)
 
