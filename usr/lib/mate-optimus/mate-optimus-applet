@@ -2,10 +2,13 @@
 
 import gettext
 import gi
+import itertools
 import os
 import setproctitle
 import subprocess
 import sys
+import threading
+import time
 from subprocess import DEVNULL, PIPE
 
 gi.require_version('Gdk', '3.0')
@@ -27,19 +30,60 @@ except:
 # i18n
 gettext.install("mate-optimus", "/usr/share/locale")
 
+def with_progress(wrapped):
+    Notify.init(_('GPU Configuration Switched'))
+    notification = Notify.Notification()
+    spinner_chars = itertools.cycle('|/-\\')
+    def inner(*arg, **kw):
+        t = threading.Thread(target=wrapped, args=arg, kwargs=kw)
+        t.start()
+        while t.isAlive():
+            notification.update(
+                _('Switching PRIME Profile') + '  %s' % next(spinner_chars),
+                '',
+                'dialog-information'
+            )
+            notification.show()
+            time.sleep(0.07) # pretty ghetto
+        indicator = arg[0]
+        if indicator.switched:
+            notification.update(
+                _('GPU Configuration Switched'),
+                _('Log out and log back in to complete the enablement of the '
+                  'default GPU to %s' % indicator.switched),
+                  'dialog-information'
+            )
+            notification.show()
+            indicator.switched = False
+        else:
+            notification.update(
+                _('GPU Configuration Switch Failed'),
+                _('More information may be available in the system logs'),
+                'dialog-information'
+            )
+            notification.show()
+    return inner
+
 def get_active_gpu():
     process = subprocess.Popen(['prime-select', 'query'], stdout=PIPE)
     out, err = process.communicate()
     return out.decode('utf-8')
 
 
-def gpu_switch_notify(gpu):
-    Notify.init(_('GPU Configuration Switched'))
-    notify=Notify.Notification.new (_('GPU Configuration Switched'),_('Log out and log back in to complete the enablement of the default GPU to ' + gpu), 'dialog-information')
-    notify.show()
+class Switcher:
+    switched = False
+    @with_progress
+    def switch_to_nvidia(self, arg=None):
+        if subprocess.call(["pkexec", "prime-select", "nvidia"]) == 0:
+            self.switched = 'nvidia'
 
+    @with_progress
+    def switch_to_intel(self, arg=None):
+        if subprocess.call(["pkexec", "prime-select", "intel"]) == 0:
+            self.switched = 'Intel'
+    
 
-class Indicator:
+class Indicator(Switcher):
     def __init__(self):
         self.icon = AppIndicator3.Indicator.new('mate-optimus', '', AppIndicator3.IndicatorCategory.APPLICATION_STATUS)
         self.icon.set_status(AppIndicator3.IndicatorStatus.ACTIVE)
@@ -83,19 +127,11 @@ class Indicator:
     def run_nvidia_settings(self, arg=None):
         subprocess.Popen(["nvidia-settings", "-page", "PRIME Profiles"])
 
-    def switch_to_nvidia(self, arg=None):
-        subprocess.call(["pkexec", "prime-select", "nvidia"])
-        gpu_switch_notify('nvidia')
-
-    def switch_to_intel(self, arg=None):
-        subprocess.call(["pkexec", "prime-select", "intel"])
-        gpu_switch_notify('Intel')
-
     def terminate(self, window = None, data = None):
         Gtk.main_quit()
 
 
-class Tray:
+class Tray(Switcher):
     def __init__(self):
         self.icon = Gtk.StatusIcon()
         self.icon.set_title("mate-optimus")
@@ -119,14 +155,6 @@ class Tray:
 
     def run_nvidia_settings(self, arg=None):
         subprocess.Popen(["nvidia-settings", "-page", "PRIME Profiles"])
-
-    def switch_to_nvidia(self, arg=None):
-        subprocess.call(["pkexec", "prime-select", "nvidia"])
-        gpu_switch_notify('nvidia')
-
-    def switch_to_intel(self, arg=None):
-        subprocess.call(["pkexec", "prime-select", "intel"])
-        gpu_switch_notify('Intel')
 
     def on_popup_menu(self, icon, button, time, data = None):
         menu = Gtk.Menu()
