@@ -59,7 +59,7 @@ def with_progress(wrapped):
             notification.update(
                 _('GPU Configuration Switch Failed'),
                 _('More information may be available in the system logs'),
-                'dialog-information'
+                'dialog-error'
             )
             notification.show()
     return inner
@@ -81,7 +81,7 @@ class Switcher:
     def switch_to_intel(self, arg=None):
         if subprocess.call(["pkexec", "prime-select", "intel"]) == 0:
             self.switched = 'Intel'
-    
+
 
 class Indicator(Switcher):
     def __init__(self):
