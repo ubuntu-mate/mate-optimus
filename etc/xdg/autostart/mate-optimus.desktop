@@ -7,3 +7,4 @@ Terminal=false
 Type=Application
 Categories=GTK;GNOME;Settings;
 StartupNotify=false
+NoDisplay=true
