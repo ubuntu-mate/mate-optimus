@@ -32,7 +32,6 @@ def get_active_gpu():
     out, err = process.communicate()
     return out.decode('utf-8')
 
-
 def gpu_switch_notify(gpu):
     Notify.init(_('GPU Configuration Switched'))
     notify=Notify.Notification.new (_('GPU Configuration Switched'),_('Log out and log back in to complete the enablement of the default GPU to ' + gpu), 'dialog-information')
