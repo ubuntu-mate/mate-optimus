@@ -38,6 +38,16 @@ def gpu_switch_notify(gpu):
     notify=Notify.Notification.new (_('GPU Configuration Switched'),_('Log out and log back in to complete the enablement of the default GPU to ' + gpu), 'dialog-information')
     notify.show()
 
+def run_nvidia_settings(arg=None):
+    subprocess.Popen(["nvidia-settings", "-page", "PRIME Profiles"])
+
+def switch_to_nvidia(arg=None):
+    subprocess.call(["pkexec", "prime-select", "nvidia"])
+    gpu_switch_notify('nvidia')
+
+def switch_to_intel(arg=None):
+    subprocess.call(["pkexec", "prime-select", "intel"])
+    gpu_switch_notify('Intel')
 
 class Indicator:
     def __init__(self):
@@ -60,16 +70,16 @@ class Indicator:
 
         if 'intel' in self.active_gpu:
             item = Gtk.MenuItem(label=_("Switch to nvidia"))
-            item.connect("activate", self.switch_to_nvidia)
+            item.connect("activate", switch_to_nvidia)
             menu.append(item)
 
         if 'nvidia' in self.active_gpu:
             item = Gtk.MenuItem(label=_("Switch to Intel"))
-            item.connect("activate", self.switch_to_intel)
+            item.connect("activate", switch_to_intel)
             menu.append(item)
 
         item = Gtk.MenuItem(label=_("NVIDIA Settings"))
-        item.connect("activate", self.run_nvidia_settings)
+        item.connect("activate", run_nvidia_settings)
         menu.append(item)
 
         menu.append(Gtk.SeparatorMenuItem())
@@ -79,17 +89,6 @@ class Indicator:
         menu.append(item)
         menu.show_all()
         self.icon.set_menu(menu)
-
-    def run_nvidia_settings(self, arg=None):
-        subprocess.Popen(["nvidia-settings", "-page", "PRIME Profiles"])
-
-    def switch_to_nvidia(self, arg=None):
-        subprocess.call(["pkexec", "prime-select", "nvidia"])
-        gpu_switch_notify('nvidia')
-
-    def switch_to_intel(self, arg=None):
-        subprocess.call(["pkexec", "prime-select", "intel"])
-        gpu_switch_notify('Intel')
 
     def terminate(self, window = None, data = None):
         Gtk.main_quit()
@@ -115,18 +114,7 @@ class Tray:
             self.icon.set_tooltip_text(_("Active graphics card: " + self.active_gpu))
 
     def on_activate(self, icon, data=None):
-        self.run_nvidia_settings();
-
-    def run_nvidia_settings(self, arg=None):
-        subprocess.Popen(["nvidia-settings", "-page", "PRIME Profiles"])
-
-    def switch_to_nvidia(self, arg=None):
-        subprocess.call(["pkexec", "prime-select", "nvidia"])
-        gpu_switch_notify('nvidia')
-
-    def switch_to_intel(self, arg=None):
-        subprocess.call(["pkexec", "prime-select", "intel"])
-        gpu_switch_notify('Intel')
+        run_nvidia_settings();
 
     def on_popup_menu(self, icon, button, time, data = None):
         menu = Gtk.Menu()
@@ -139,16 +127,16 @@ class Tray:
 
         if 'intel' in self.active_gpu:
             item = Gtk.MenuItem(label=_("Switch to nvidia"))
-            item.connect("activate", self.switch_to_nvidia)
+            item.connect("activate", switch_to_nvidia)
             menu.append(item)
 
         if 'nvidia' in self.active_gpu:
             item = Gtk.MenuItem(label=_("Switch to Intel"))
-            item.connect("activate", self.switch_to_intel)
+            item.connect("activate", switch_to_intel)
             menu.append(item)
 
         item = Gtk.MenuItem(label=_("NVIDIA Settings"))
-        item.connect("activate", self.run_nvidia_settings)
+        item.connect("activate", run_nvidia_settings)
         menu.append(item)
 
         menu.append(Gtk.SeparatorMenuItem())
