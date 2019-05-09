@@ -49,13 +49,13 @@ class Indicator:
         self.active_gpu = get_active_gpu()
 
         if ('nvidia' in self.active_gpu):
-            self.icon.set_icon("optimus-tray-nvidia")
+            self.icon.set_icon("optimus-tray-nvidia-symbolic")
             self.icon.set_title(_("Active graphics card: NVIDIA"))
         elif ('intel' in self.active_gpu):
-            self.icon.set_icon("optimus-tray-intel")
+            self.icon.set_icon("optimus-tray-intel-symbolic")
             self.icon.set_title(_("Active graphics card: Intel"))
         else:
-            self.icon.set_icon("optimus-tray-intel")
+            self.icon.set_icon("optimus-tray-intel-symbolic")
             self.icon.set_title(_("Active graphics card: " + self.active_gpu))
 
         if 'intel' in self.active_gpu:
