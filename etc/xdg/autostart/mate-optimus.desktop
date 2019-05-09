@@ -8,3 +8,4 @@ Type=Application
 Categories=GTK;GNOME;Settings;
 StartupNotify=false
 NoDisplay=true
+OnlyShowIn=MATE;
