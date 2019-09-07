@@ -103,7 +103,7 @@ class Indicator:
             current_icon = "optimus-indicator-nvidia"
             current_gpu = _("NVIDIA (On-Demand)")
         else:
-            self.icon.set_icon("optimus-indicator-unknown")
+            current_icon = "optimus-indicator-unknown"
             current_gpu = _("Unknown")
 
         # If we can derive the OpenGL renderer use that for current_gpu
