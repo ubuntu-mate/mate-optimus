@@ -1,8 +1,8 @@
 [Desktop Entry]
-Name=MATE NVIDIA Optimus
-Comment=Shows a tray icon when a compatible NVIDIA Optimus graphics card is detected
+Name=NVIDIA Optimus
+Comment=NVIDIA Optimus GPU switcher
 Exec=/usr/lib/mate-optimus/mate-optimus-applet
-Icon=optimus-tray-nvidia
+Icon=optimus-indicator-unknown
 Terminal=false
 Type=Application
 Categories=GTK;GNOME;Settings;
