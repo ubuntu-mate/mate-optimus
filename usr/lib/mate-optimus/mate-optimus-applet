@@ -17,12 +17,8 @@ from gi.repository import Gtk
 gi.require_version('Notify', '0.7')
 from gi.repository import Notify
 
-try:
-    gi.require_version('AppIndicator3', '0.1')
-    from gi.repository import AppIndicator3
-    indicator_available = True
-except:
-    indicator_available = False
+gi.require_version('AppIndicator3', '0.1')
+from gi.repository import AppIndicator3
 
 # i18n
 gettext.install("mate-optimus", "/usr/share/locale")
@@ -96,66 +92,6 @@ class Indicator:
     def terminate(self, window = None, data = None):
         Gtk.main_quit()
 
-
-class Tray:
-    def __init__(self):
-        self.icon = Gtk.StatusIcon()
-        self.icon.set_title("mate-optimus")
-        self.icon.connect("popup-menu", self.on_popup_menu)
-        self.icon.connect("activate", self.on_activate)
-
-        self.active_gpu = get_active_gpu()
-
-        if ('nvidia' in self.active_gpu):
-            self.icon.set_from_icon_name("optimus-tray-nvidia")
-            self.icon.set_tooltip_text(_("Active graphics card: NVIDIA"))
-        elif ('intel' in self.active_gpu):
-            self.icon.set_from_icon_name("optimus-tray-intel")
-            self.icon.set_tooltip_text(_("Active graphics card: Intel"))
-        else:
-            self.icon.set_from_icon_name("optimus-tray-intel")
-            self.icon.set_tooltip_text(_("Active graphics card: " + self.active_gpu))
-
-    def on_activate(self, icon, data=None):
-        run_nvidia_settings();
-
-    def on_popup_menu(self, icon, button, time, data = None):
-        menu = Gtk.Menu()
-
-        def position_menu_cb(m, x, y=None, i=None):
-            try:
-                return Gtk.StatusIcon.position_menu(menu, x, y, icon)
-            except (AttributeError, TypeError):
-                return Gtk.StatusIcon.position_menu(menu, icon)
-
-        if 'intel' in self.active_gpu:
-            item = Gtk.MenuItem(label=_("Switch to nvidia"))
-            item.connect("activate", switch_to_nvidia)
-            menu.append(item)
-
-        if 'nvidia' in self.active_gpu:
-            item = Gtk.MenuItem(label=_("Switch to Intel"))
-            item.connect("activate", switch_to_intel)
-            menu.append(item)
-
-        item = Gtk.MenuItem(label=_("NVIDIA Settings"))
-        item.connect("activate", run_nvidia_settings)
-        menu.append(item)
-
-        menu.append(Gtk.SeparatorMenuItem())
-
-        item = Gtk.MenuItem(label=_("Quit"))
-        item.connect("activate", self.terminate)
-        menu.append(item)
-
-        menu.show_all()
-
-        device = Gdk.Display.get_default().get_device_manager().get_client_pointer()
-        menu.popup_for_device(device, None, None, position_menu_cb, icon, button, time)
-
-    def terminate(self, window = None, data = None):
-        Gtk.main_quit()
-
 if __name__ == "__main__":
     setproctitle.setproctitle('mate-optimus')
 
@@ -171,9 +107,5 @@ if __name__ == "__main__":
         print('Prime not supported.')
         sys.exit(0)
 
-    if indicator_available:
-        Indicator()
-    else:
-        Tray()
-
+    Indicator()
     Gtk.main()
