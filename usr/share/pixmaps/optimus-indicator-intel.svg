@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:export-ydpi="38.249958"
+   inkscape:export-xdpi="38.249958"
+   inkscape:export-filename="/home/andre/git/prime-indicator/resource/intel.svg.png"
+   sodipodi:docname="optimus-indicator-intel.svg"
+   inkscape:version="1.0alpha2 (7a951d2db3, 2019-09-06)"
+   id="svg2"
+   version="1"
+   height="24"
+   width="24">
+  <metadata
+     id="metadata16">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs14" />
+  <sodipodi:namedview
+     inkscape:document-rotation="0"
+     fit-margin-bottom="55.00083"
+     fit-margin-top="55.00083"
+     fit-margin-right="5"
+     fit-margin-left="5"
+     inkscape:current-layer="svg2"
+     inkscape:window-maximized="1"
+     inkscape:window-y="30"
+     inkscape:window-x="2560"
+     inkscape:cy="31.151681"
+     inkscape:cx="51.250468"
+     inkscape:zoom="12.564706"
+     showgrid="false"
+     id="namedview12"
+     inkscape:window-height="1379"
+     inkscape:window-width="2560"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10"
+     borderopacity="1"
+     bordercolor="#666666"
+     pagecolor="#ffffff" />
+  <g
+     transform="matrix(0.07333287,0,0,0.07333287,0.63333627,0.63333598)"
+     id="g1986">
+    <path
+       d="M 303.68264,111.80119 C 289.55664,42.408188 156.32064,38.013188 70.432641,90.881188 v 5.84 c 85.773999,-44.62 207.479999,-44.334 218.555999,19.588002 3.732,21.176 -8.022,43.2 -29.097,55.872 v 16.584 c 25.37,-9.38 51.304,-39.744 43.792,-76.964 m -156.179,121.497 c -59.269999,5.53 -121.029999,-3.173 -129.675999,-50.033 -4.293,-23.075 6.16,-47.565 19.947,-62.76 v -8.136 c -24.862,22.054 -38.36699984,49.95 -30.5699998,82.886 9.9449998,42.267 62.9459998,66.192 143.8599988,58.226 32.037,-3.117 73.964,-13.55 103.06,-29.733 v -22.992 c -26.442,15.958 -70.177,29.143 -106.62,32.542 z"
+       id="path4"
+       style="fill:#127cc1;fill-opacity:1;stroke:none"
+       inkscape:connector-curvature="0" />
+    <path
+       d="m 249.38064,101.77119 h -15.54 v 70.05 c 0,8.228 3.9,15.384 15.54,16.52 m -185.104999,-60.97 h -15.54 v 45.755 c 0,8.23 3.9,15.383 15.54,16.517 m -15.539,-85.745 h 15.54 v 14.903 h -15.54 z m 108.653999,85.009 c -12.598,0 -17.91,-8.857 -17.91,-17.598 v -60.77 h 15.37 v 16.832 h 11.638 v 12.602 h -11.638 v 30.4 c 0,3.574 1.695,5.535 5.366,5.535 h 6.272 v 13 h -9.097 m 40.852,-49.7 c -5.253,0 -9.32,2.752 -11.016,6.47 -1.017,2.243 -1.357,3.946 -1.524,6.7 h 23.787 c -0.34,-6.727 -3.336,-13.17 -11.247,-13.17 m -12.54,23.786 c 0,7.976 4.97,13.848 13.67,13.848 6.84,0 10.23,-1.93 14.185,-5.87 l 9.493,9.223 c -6.102,6.072 -12.487,9.763 -23.787,9.763 -14.747,0 -28.874,-8.146 -28.874,-31.875 0,-20.292 12.316,-31.76 28.533,-31.76 16.443,0 25.877,13.426 25.877,31.053 v 5.62 h -39.097 m -79.559,-23.023 c 4.52,0 6.385,2.243 6.385,5.904 v 43.115 h 15.425 v -43.17 c 0,-8.77 -4.634,-18.45 -18.138,-18.45 H 78.006641 v 61.62 h 15.367 v -49.018"
+       id="path6"
+       style="fill:#127cc1;fill-opacity:1;stroke:none"
+       inkscape:connector-curvature="0" />
+    <text
+       style="font-size:14.4426px;line-height:0%;font-family:Arial;text-align:start;fill:#127cc1;fill-opacity:1;stroke:none"
+       x="256.41162"
+       y="112.78516"
+       transform="scale(1.0070247,0.99302433)"
+       font-size="14.443"
+       id="text8"><tspan
+         x="256.41162"
+         y="112.78516"
+         id="tspan10"
+         style="fill:#127cc1;fill-opacity:1;stroke:none">®</tspan></text>
+  </g>
+</svg>
