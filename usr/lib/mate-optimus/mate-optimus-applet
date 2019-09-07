@@ -54,7 +54,7 @@ def switch_to_intel(arg=None):
     gpu_switch_notify('Intel')
 
 def switch_to_ondemand(arg=None):
-    subprocess.call(["pkexec", "prime-select", "ondemand"])
+    subprocess.call(["pkexec", "prime-select", "on-demand"])
     gpu_switch_notify('on-demand')
 
 class Indicator:
