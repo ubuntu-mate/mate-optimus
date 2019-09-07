@@ -20,9 +20,11 @@ from gi.repository import Notify
 gi.require_version('AppIndicator3', '0.1')
 from gi.repository import AppIndicator3
 
+__VERSION__ = '19.10.2'
+
 # i18n
 gettext.install("mate-optimus", "/usr/share/locale")
-forced = False
+forced = True
 
 def get_active_gpu():
     process = subprocess.Popen(['prime-select', 'query'], stdout=PIPE)
