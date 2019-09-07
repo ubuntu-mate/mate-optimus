@@ -28,21 +28,58 @@ def get_active_gpu():
     out, err = process.communicate()
     return out.decode('utf-8')
 
-def check_capability(capability):
-    # If we're check for nvidia let's make real sure we have an nvidia GPU.
-    if capability == 'nvidia':
-        nvidia-detector = subprocess.Popen(['nvidia-detector'], stdout=PIPE, stderr=DEVNULL)
-        out, err = nvidia-detector.communicate()
-        if 'None' in out.decode('utf-8'):
-            return False
-
-    # prime-select outputs to stderr
-    prime-select = subprocess.Popen(['prime-select'], stdout=PIPE, stderr=PIPE)
-    out, err = prime-select.communicate()
-    if capability in err.decode('utf-8'):
+def prime_capable():
+    prime_supported = subprocess.Popen(['prime-supported'], stdout=PIPE, stderr=DEVNULL)
+    out, err = prime_supported.communicate()
+    if 'yes' in out.decode('utf-8'):
         return True
     else:
         return False
+
+def nvidia_detected():
+    # If we're check for nvidia let's make real sure we have an nvidia GPU.
+    nvidia_detector = subprocess.Popen(['nvidia-detector'], stdout=PIPE, stderr=DEVNULL)
+    out, err = nvidia_detector.communicate()
+    if 'None' in out.decode('utf-8'):
+        return False
+    else:
+        return True
+
+def gpu_loaded(gpu):
+    # Does prime-switch report that the GPU is available?
+    if gpu == 'intel' or gpu == 'nvidia' or gpu == 'amdgpu' or gpu == 'radeon':
+        gpu_loaded = gpu + ' loaded'
+        prime_switch = subprocess.Popen(['prime-switch', '-help'], stdout=PIPE, stderr=DEVNULL)
+        for line in prime_switch.stdout.readlines():
+            text = line.rstrip().decode('utf-8')
+            if gpu_loaded in text:
+                return True
+        return False
+    else:
+        return True
+
+def check_capability(capability):
+    capable = gpu_loaded(capability)
+    print(capability + ' loaded: ' + str(capable))
+
+    capable = capable and prime_capable()
+    print(capability + ' prime-supported: ' + str(capable))
+
+    if capability == 'nvidia' or capability == 'on-demand':
+        capable = capable and nvidia_detected()
+        print(capability + ' nvidia detected: ' + str(capable))
+
+    # prime-select outputs to stderr
+    prime_select = subprocess.Popen(['prime-select'], stdout=PIPE, stderr=PIPE)
+    out, err = prime_select.communicate()
+    if capability in err.decode('utf-8'):
+        capable = capable and True
+    else:
+        capable = capable and False
+    print(capability + ' prime-select: ' + str(capable))
+    
+    print(capability + ': ' + str(capable))
+    return capable
 
 def confirm_ignore(*args):
   return Gtk.ResponseType.CANCEL
@@ -172,6 +209,7 @@ class Indicator:
         Gtk.main_quit()
 
 if __name__ == "__main__":
+    forced = False
     setproctitle.setproctitle('mate-optimus')
 
     # If NVIDIA Prime is not installed or isn't supported then exit.
@@ -179,12 +217,9 @@ if __name__ == "__main__":
         print('No nvidia-settings and prime-select detected.')
         sys.exit(0)
 
-    process = subprocess.Popen(['prime-supported'], stdout=PIPE, stderr=DEVNULL)
-    out, err = process.communicate()
-    prime_supported = out.decode('utf-8')
-    if 'yes' not in prime_supported:
+    if prime_capable() or forced:
+        print('Prime supported.')
+        Indicator()
+        Gtk.main()
+    else:
         print('Prime not supported.')
-        sys.exit(0)
-
-    Indicator()
-    Gtk.main()
