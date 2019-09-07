@@ -28,6 +28,15 @@ def get_active_gpu():
     out, err = process.communicate()
     return out.decode('utf-8')
 
+def check_capability(capability):
+    process = subprocess.Popen(['prime-select', '-h'], stdout=PIPE, stderr=PIPE)
+    out, err = process.communicate()
+    capabilities = err.decode('utf-8')
+    if capability in capabilities:
+        return True
+    else:
+        return False
+
 def gpu_switch_notify(gpu):
     Notify.init(_('GPU Configuration Switched'))
     notify=Notify.Notification.new (_('GPU Configuration Switched'),_('Log out and log back in to complete the enablement of the default GPU to ' + gpu), 'dialog-information')
