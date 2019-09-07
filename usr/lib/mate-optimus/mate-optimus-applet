@@ -97,22 +97,24 @@ class Indicator:
         self.ondemand_available = check_capability('on-demand')
         self.active_gpu = get_active_gpu()
 
+        visualinfo = subprocess.Popen('visualinfo', stdout=PIPE, stderr=STDOUT)
+        for line in visualinfo.stdout.readlines():
+            text = line.rstrip().decode('utf-8')
+            if 'OpenGL renderer string:' in text:
+                opengl_renderer = text.replace('OpenGL renderer string:','').strip()
+                break
+
         if ('intel' in self.active_gpu):
             self.icon.set_icon("optimus-tray-intel-symbolic")
-            self.icon_tooltip_text = _("Active graphics card: ") + _("Intel (Power Saving)")
         elif ('nvidia' in self.active_gpu):
             self.icon.set_icon("optimus-tray-nvidia-symbolic")
-            self.icon_tooltip_text = _("Active graphics card: ") + _("NVIDIA (Performance Mode)")
         elif ('on-demand' in self.active_gpu):
             self.icon.set_icon("optimus-tray-nvidia-symbolic")
-            self.icon_tooltip_text = _("Active graphics card: ") + _("NVIDIA (On-Demand)")
         else:
             self.icon.set_icon("optimus-tray-unknown-symbolic")
-            self.icon_tooltip_text = _("Active graphics card: ") + _("Unknown")
 
-        self.icon.set_title(self.icon_tooltip_text)
-
-        active = Gtk.MenuItem(label=self.icon_tooltip_text)
+        self.icon.set_title(opengl_renderer)
+        active = Gtk.MenuItem(label=opengl_renderer)
         active.set_sensitive(False)
         menu.append(active)
 
