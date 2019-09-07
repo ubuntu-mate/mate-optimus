@@ -45,17 +45,17 @@ def gpu_switch_notify(gpu):
 def run_nvidia_settings(arg=None):
     subprocess.Popen(["nvidia-settings", "-page", "PRIME Profiles"])
 
-def switch_to_nvidia(arg=None):
-    subprocess.call(["pkexec", "prime-select", "nvidia"])
-    gpu_switch_notify('nvidia')
-
 def switch_to_intel(arg=None):
-    subprocess.call(["pkexec", "prime-select", "intel"])
-    gpu_switch_notify('Intel')
+    #subprocess.call(["pkexec", "prime-select", "intel"])
+    gpu_switch_notify(_("Intel (Power Saving)"))
+
+def switch_to_nvidia(arg=None):
+    #subprocess.call(["pkexec", "prime-select", "nvidia"])
+    gpu_switch_notify(_("NVIDIA (Performance Mode)"))
 
 def switch_to_ondemand(arg=None):
-    subprocess.call(["pkexec", "prime-select", "on-demand"])
-    gpu_switch_notify('on-demand')
+    #subprocess.call(["pkexec", "prime-select", "on-demand"])
+    gpu_switch_notify(_("NVIDIA (On-Demand)"))
 
 class Indicator:
     def __init__(self):
