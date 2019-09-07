@@ -106,13 +106,13 @@ class Indicator:
                 break
 
         if ('intel' in self.active_gpu):
-            self.icon.set_icon("optimus-tray-intel-symbolic")
+            self.icon.set_icon("optimus-tray-intel")
         elif ('nvidia' in self.active_gpu):
-            self.icon.set_icon("optimus-tray-nvidia-symbolic")
+            self.icon.set_icon("optimus-tray-nvidia")
         elif ('on-demand' in self.active_gpu):
-            self.icon.set_icon("optimus-tray-nvidia-symbolic")
+            self.icon.set_icon("optimus-tray-nvidia")
         else:
-            self.icon.set_icon("optimus-tray-unknown-symbolic")
+            self.icon.set_icon("optimus-tray-unknown")
 
         self.icon.set_title(opengl_renderer)
         active = Gtk.MenuItem(label=opengl_renderer)
