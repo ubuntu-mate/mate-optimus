@@ -29,10 +29,17 @@ def get_active_gpu():
     return out.decode('utf-8')
 
 def check_capability(capability):
-    process = subprocess.Popen(['prime-select', '-h'], stdout=PIPE, stderr=PIPE)
-    out, err = process.communicate()
-    capabilities = err.decode('utf-8')
-    if capability in capabilities:
+    # If we're check for nvidia let's make real sure we have an nvidia GPU.
+    if capability == 'nvidia':
+        nvidia-detector = subprocess.Popen(['nvidia-detector'], stdout=PIPE, stderr=DEVNULL)
+        out, err = nvidia-detector.communicate()
+        if 'None' in out.decode('utf-8')
+            return False
+
+    # prime-select outputs to stderr
+    prime-select = subprocess.Popen(['prime-select'], stdout=PIPE, stderr=PIPE)
+    out, err = prime-select.communicate()
+    if capability in err.decode('utf-8'):
         return True
     else:
         return False
