@@ -37,14 +37,15 @@ def check_capability(capability):
     else:
         return False
 
-def ignore(*args):
+def confirm_ignore(*args):
   return Gtk.ResponseType.CANCEL
 
 def confirm_gpu_switch(gpu):
-    message = ('Do you want to switch GPU now?') + _('You need to log out and then log back in to switch the GPU to ') + gpu
+    message = ('Do you want to switch GPU now?') + ' ' + ('You need to log out and then log back in to switch the GPU to') + ' ' + gpu
+
     dialog = Gtk.MessageDialog(None, Gtk.DialogFlags.MODAL, Gtk.MessageType.INFO, Gtk.ButtonsType.NONE, message)
     dialog.set_deletable(False)
-    dialog.connect("delete_event", ignore)
+    dialog.connect("delete_event", confirm_ignore)
     dialog.add_button(_("Log Out"), Gtk.ResponseType.OK)
     dialog.add_button(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL)
     response = dialog.run()
