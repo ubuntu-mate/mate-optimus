@@ -54,6 +54,19 @@ def confirm_gpu_switch(gpu):
 def run_nvidia_settings(arg=None):
     subprocess.Popen(["nvidia-settings", "-page", "PRIME Profiles"])
 
+def session_logout():
+    current_desktop = os.environ.get("XDG_CURRENT_DESKTOP").lower()
+    if 'mate' in current_desktop:
+        subprocess.Popen(["mate-session-save", "--logout"])
+    elif 'xfce' in current_desktop:
+        subprocess.Popen(["xfce4-session-logout", "--logout"])
+    elif 'x-cinnamon' in current_desktop:
+        subprocess.Popen(["cinnamon-session-quit", "--logout", "--no-prompt"])
+    elif 'budgie' in current_desktop:
+        subprocess.Popen(["budgie-session", "--logout"])
+    else:
+        pass
+
 def switch_to_intel(arg=None):
     #subprocess.call(["pkexec", "prime-select", "intel"])
     gpu_switch_notify(_("Intel (Power Saving)"))
