@@ -64,6 +64,9 @@ class Indicator:
 
         menu = Gtk.Menu()
 
+        self.intel_available = check_capability('intel')
+        self.nvidia_available = check_capability('nvidia')
+        self.ondemand_available = check_capability('on-demand')
         self.active_gpu = get_active_gpu()
 
         if ('nvidia' in self.active_gpu):
