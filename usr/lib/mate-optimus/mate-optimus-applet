@@ -33,7 +33,7 @@ def check_capability(capability):
     if capability == 'nvidia':
         nvidia-detector = subprocess.Popen(['nvidia-detector'], stdout=PIPE, stderr=DEVNULL)
         out, err = nvidia-detector.communicate()
-        if 'None' in out.decode('utf-8')
+        if 'None' in out.decode('utf-8'):
             return False
 
     # prime-select outputs to stderr
