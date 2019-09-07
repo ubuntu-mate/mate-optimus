@@ -200,13 +200,14 @@ class Indicator:
                 ondemand.set_sensitive(False)
             menu.append(ondemand)
 
-        menu.append(Gtk.SeparatorMenuItem())
+        if self.intel_available or self.nvidia_available or self.ondemand_available:
+            menu.append(Gtk.SeparatorMenuItem())
 
-        settings = Gtk.MenuItem(label=_("NVIDIA Settings"))
-        settings.connect("activate", run_nvidia_settings)
-        menu.append(settings)
-
-        menu.append(Gtk.SeparatorMenuItem())
+        if has_nvidia_settings:
+            settings = Gtk.MenuItem(label=_("NVIDIA Settings"))
+            settings.connect("activate", run_nvidia_settings)
+            menu.append(settings)
+            menu.append(Gtk.SeparatorMenuItem())
 
         quit_app = Gtk.MenuItem(label=_("Quit"))
         quit_app.connect("activate", self.terminate)
