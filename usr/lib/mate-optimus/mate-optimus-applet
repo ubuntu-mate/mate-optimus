@@ -50,7 +50,7 @@ def switch_to_ondemand(arg=None):
 
 class Indicator:
     def __init__(self):
-        self.icon = AppIndicator3.Indicator.new('mate-optimus', '', AppIndicator3.IndicatorCategory.APPLICATION_STATUS)
+        self.icon = AppIndicator3.Indicator.new('mate-optimus', '', AppIndicator3.IndicatorCategory.HARDWARE)
         self.icon.set_status(AppIndicator3.IndicatorStatus.ACTIVE)
 
         menu = Gtk.Menu()
