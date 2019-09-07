@@ -177,7 +177,7 @@ if __name__ == "__main__":
     prime_supported = out.decode('utf-8')
     if 'yes' not in prime_supported:
         print('Prime not supported.')
-        sys.exit(0)
+        #sys.exit(0)
 
     Indicator()
     Gtk.main()
