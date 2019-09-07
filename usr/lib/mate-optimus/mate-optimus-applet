@@ -6,7 +6,7 @@ import os
 import setproctitle
 import subprocess
 import sys
-from subprocess import DEVNULL, PIPE
+from subprocess import DEVNULL, PIPE, STDOUT
 
 gi.require_version('Gdk', '3.0')
 from gi.repository import Gdk
