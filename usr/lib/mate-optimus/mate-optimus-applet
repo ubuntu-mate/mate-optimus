@@ -141,7 +141,7 @@ class Indicator:
             menu.append(nvidia)
 
         if self.ondemand_available:
-            ondemand = Gtk.MenuItem(label=_("Switch to: ") + ("NVIDIA (On-Demand)"))
+            ondemand = Gtk.MenuItem(label=_("Switch to: ") + _("NVIDIA (On-Demand)"))
             ondemand.connect("activate", switch_to_ondemand)
             if 'on-demand' in self.active_gpu:
                 ondemand.set_sensitive(False)
