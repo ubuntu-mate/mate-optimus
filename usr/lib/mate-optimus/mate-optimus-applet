@@ -37,10 +37,19 @@ def check_capability(capability):
     else:
         return False
 
-def gpu_switch_notify(gpu):
-    Notify.init(_('MATE Optimus'))
-    notify=Notify.Notification.new (_('GPU Configuration Switched'),_('Log out and log back in to complete the enablement of the default GPU to ' + gpu), 'dialog-information')
-    notify.show()
+def ignore(*args):
+  return Gtk.ResponseType.CANCEL
+
+def confirm_gpu_switch(gpu):
+    message = ('Do you want to switch GPU now?') + _('You need to log out and then log back in to switch the GPU to ') + gpu
+    dialog = Gtk.MessageDialog(None, Gtk.DialogFlags.MODAL, Gtk.MessageType.INFO, Gtk.ButtonsType.NONE, message)
+    dialog.set_deletable(False)
+    dialog.connect("delete_event", ignore)
+    dialog.add_button(_("Log Out"), Gtk.ResponseType.OK)
+    dialog.add_button(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL)
+    response = dialog.run()
+    dialog.destroy()
+    return response
 
 def run_nvidia_settings(arg=None):
     subprocess.Popen(["nvidia-settings", "-page", "PRIME Profiles"])
