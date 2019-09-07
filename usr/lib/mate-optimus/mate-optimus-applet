@@ -68,16 +68,22 @@ def session_logout():
         pass
 
 def switch_to_intel(arg=None):
-    #subprocess.call(["pkexec", "prime-select", "intel"])
-    gpu_switch_notify(_("Intel (Power Saving)"))
+    response = confirm_gpu_switch(_("Intel (Power Saving)"))
+    if response != Gtk.ResponseType.CANCEL:
+        subprocess.call(["pkexec", "prime-select", "intel"])
+        session_logout()
 
 def switch_to_nvidia(arg=None):
-    #subprocess.call(["pkexec", "prime-select", "nvidia"])
-    gpu_switch_notify(_("NVIDIA (Performance Mode)"))
+    response = confirm_gpu_switch(_("NVIDIA (Performance Mode)"))
+    if response != Gtk.ResponseType.CANCEL:
+        subprocess.call(["pkexec", "prime-select", "nvidia"])
+        session_logout()
 
 def switch_to_ondemand(arg=None):
-    #subprocess.call(["pkexec", "prime-select", "on-demand"])
-    gpu_switch_notify(_("NVIDIA (On-Demand)"))
+    response = confirm_gpu_switch(_("NVIDIA (On-Demand)"))
+    if response != Gtk.ResponseType.CANCEL:
+        subprocess.call(["pkexec", "prime-select", "on-demand"])
+        session_logout()
 
 class Indicator:
     def __init__(self):
