@@ -98,7 +98,7 @@ def confirm_ignore(*args):
   return Gtk.ResponseType.CANCEL
 
 def confirm_gpu_switch(gpu):
-    message = ('Do you want to switch GPU now?') + ' ' + ('You need to log out and then log back in to switch the GPU to') + ' ' + gpu
+    message = _('Do you want to switch GPU now?') + ' ' + _('You need to log out and then log back in to switch the GPU to') + ' ' + gpu
 
     dialog = Gtk.MessageDialog(None, Gtk.DialogFlags.MODAL, Gtk.MessageType.INFO, Gtk.ButtonsType.NONE, message)
     dialog.set_deletable(False)
