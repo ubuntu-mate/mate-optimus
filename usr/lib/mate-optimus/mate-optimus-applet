@@ -88,34 +88,39 @@ def switch_to_ondemand(arg=None):
 
 class Indicator:
     def __init__(self):
-        self.icon = AppIndicator3.Indicator.new('mate-optimus', '', AppIndicator3.IndicatorCategory.HARDWARE)
-        self.icon.set_status(AppIndicator3.IndicatorStatus.ACTIVE)
-
-        menu = Gtk.Menu()
-
         self.intel_available = check_capability('intel')
         self.nvidia_available = check_capability('nvidia')
         self.ondemand_available = check_capability('on-demand')
         self.active_gpu = get_active_gpu()
 
+        if ('intel' in self.active_gpu):
+            current_icon = "optimus-indicator-intel"
+            current_gpu = _("Intel (Power Saving)")
+        elif ('nvidia' in self.active_gpu):
+            current_icon = "optimus-indicator-nvidia"
+            current_gpu = _("NVIDIA (Performance Mode)")
+        elif ('on-demand' in self.active_gpu):
+            current_icon = "optimus-indicator-nvidia"
+            current_gpu = _("NVIDIA (On-Demand)")
+        else:
+            self.icon.set_icon("optimus-indicator-unknown")
+            current_gpu = _("Unknown")
+
+        # If we can derive the OpenGL renderer use that for current_gpu
         visualinfo = subprocess.Popen('visualinfo', stdout=PIPE, stderr=STDOUT)
         for line in visualinfo.stdout.readlines():
             text = line.rstrip().decode('utf-8')
             if 'OpenGL renderer string:' in text:
-                opengl_renderer = text.replace('OpenGL renderer string:','').strip()
+                current_gpu = text.replace('OpenGL renderer string:','').strip()
                 break
 
-        if ('intel' in self.active_gpu):
-            self.icon.set_icon("optimus-tray-intel")
-        elif ('nvidia' in self.active_gpu):
-            self.icon.set_icon("optimus-tray-nvidia")
-        elif ('on-demand' in self.active_gpu):
-            self.icon.set_icon("optimus-tray-nvidia")
-        else:
-            self.icon.set_icon("optimus-tray-unknown")
+        menu = Gtk.Menu()
 
-        self.icon.set_title(opengl_renderer)
-        active = Gtk.MenuItem(label=opengl_renderer)
+        self.icon = AppIndicator3.Indicator.new('mate-optimus', current_icon, AppIndicator3.IndicatorCategory.HARDWARE)
+        self.icon.set_status(AppIndicator3.IndicatorStatus.ACTIVE)
+
+        self.icon.set_title(current_gpu)
+        active = Gtk.MenuItem(label=current_gpu)
         active.set_sensitive(False)
         menu.append(active)
 
@@ -153,8 +158,8 @@ class Indicator:
         quit_app = Gtk.MenuItem(label=_("Quit"))
         quit_app.connect("activate", self.terminate)
         menu.append(quit_app)
-        menu.show_all()
         self.icon.set_menu(menu)
+        menu.show_all()
 
     def terminate(self, window = None, data = None):
         Gtk.main_quit()
