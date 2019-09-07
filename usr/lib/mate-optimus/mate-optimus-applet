@@ -120,19 +120,25 @@ class Indicator:
 
         menu.append(Gtk.SeparatorMenuItem())
 
-        if ('intel' not in self.active_gpu) and (self.intel_available):
+        if self.intel_available:
             intel = Gtk.MenuItem(label=_("Switch to: ") + _("Intel (Power Saving)"))
             intel.connect("activate", switch_to_intel)
+            if 'intel' in self.active_gpu:
+                intel.set_sensitive(False)
             menu.append(intel)
 
-        if ('nvidia' not in self.active_gpu) and (self.nvidia_available):
-            nvidia = Gtk.MenuItem(label=_("Switch to NVIDIA (Performance Mode)"))
+        if self.nvidia_available:
+            nvidia = Gtk.MenuItem(label=_("Switch to: ") + _("NVIDIA (Performance Mode)"))
             nvidia.connect("activate", switch_to_nvidia)
+            if 'nvidia' in self.active_gpu:
+                nvidia.set_sensitive(False)
             menu.append(nvidia)
 
-        if ('on-demand' not in self.active_gpu) and (self.ondemand_available):
-            ondemand = Gtk.MenuItem(label=_("Switch to NVIDIA (On-Demand)"))
+        if self.ondemand_available:
+            ondemand = Gtk.MenuItem(label=_("Switch to: ") + ("NVIDIA (On-Demand)"))
             ondemand.connect("activate", switch_to_ondemand)
+            if 'on-demand' in self.active_gpu:
+                ondemand.set_sensitive(False)
             menu.append(ondemand)
 
         menu.append(Gtk.SeparatorMenuItem())
