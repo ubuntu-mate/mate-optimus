@@ -9,7 +9,7 @@ import sys
 from subprocess import DEVNULL, PIPE, STDOUT
 
 gi.require_version('Gdk', '3.0')
-from gi.repository import Gdk
+from gi.repository import Gdk, GdkPixbuf
 
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -213,11 +213,33 @@ class Indicator:
             menu.append(settings)
             menu.append(Gtk.SeparatorMenuItem())
 
+        about_app = Gtk.MenuItem(label=_("About"))
+        about_app.connect("activate", self.show_about)
+        menu.append(about_app)
+
         quit_app = Gtk.MenuItem(label=_("Quit"))
         quit_app.connect("activate", self.terminate)
         menu.append(quit_app)
         self.icon.set_menu(menu)
         menu.show_all()
+
+    def show_about(self, widget):
+        about = Gtk.AboutDialog()
+        about.set_program_name("MATE Optimus")
+        about.set_version(__VERSION__)
+        about.set_authors(["Martin Wimpress", "Clement Lefebvre"])
+        about.set_copyright('© 2015-2019 Ubuntu MATE Team')
+        about.set_comments("NVIDIA Optimus GPU switcher.")
+        about.set_website("https://ubuntu-mate.org")
+        about.set_website_label("https://ubuntu-mate.org")
+        about.set_license_type(Gtk.License.GPL_3_0)
+        try:
+            about.set_logo(GdkPixbuf.Pixbuf.new_from_file_at_size(os.path.join('usr', 'share', 'pixmaps', 'optimus-indicator-nvidia.svg'), 64, 64))
+        except:
+            about.set_logo_icon_name('optimus-indicator-nvidia')
+
+        about.run()
+        about.destroy()
 
     def terminate(self, window = None, data = None):
         Gtk.main_quit()
