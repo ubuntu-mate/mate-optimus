@@ -205,7 +205,7 @@ class Indicator:
         if self.intel_available or self.nvidia_available or self.ondemand_available:
             menu.append(Gtk.SeparatorMenuItem())
 
-        if has_nvidia_settings:
+        if has_nvidia_settings():
             settings = Gtk.MenuItem(label=_("NVIDIA Settings"))
             settings.connect("activate", run_nvidia_settings)
             menu.append(settings)
