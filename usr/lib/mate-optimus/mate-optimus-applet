@@ -48,6 +48,10 @@ def switch_to_intel(arg=None):
     subprocess.call(["pkexec", "prime-select", "intel"])
     gpu_switch_notify('Intel')
 
+def switch_to_ondemand(arg=None):
+    subprocess.call(["pkexec", "prime-select", "ondemand"])
+    gpu_switch_notify('on-demand')
+
 class Indicator:
     def __init__(self):
         self.icon = AppIndicator3.Indicator.new('mate-optimus', '', AppIndicator3.IndicatorCategory.APPLICATION_STATUS)
