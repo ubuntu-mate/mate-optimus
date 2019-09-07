@@ -38,7 +38,7 @@ def check_capability(capability):
         return False
 
 def gpu_switch_notify(gpu):
-    Notify.init(_('GPU Configuration Switched'))
+    Notify.init(_('MATE Optimus'))
     notify=Notify.Notification.new (_('GPU Configuration Switched'),_('Log out and log back in to complete the enablement of the default GPU to ' + gpu), 'dialog-information')
     notify.show()
 
