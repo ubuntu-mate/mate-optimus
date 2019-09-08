@@ -251,14 +251,30 @@ class Indicator:
         Gtk.main_quit()
 
 if __name__ == "__main__":
-    setproctitle.setproctitle('mate-optimus')
-
-    # Vulkan applications: __NV_PRIME_RENDER_OFFLOAD=1 vkcube
-    # GLX applications: __NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia glxinfo | grep vendor).
+    executable = os.path.basename(__file__)
+    print(executable + ': launched.')
+    setproctitle.setproctitle(executable)
 
     if (prime_capable() and has_nvidia_settings()) or forced:
-        print('Prime supported.')
-        Indicator()
-        Gtk.main()
+        print(executable + ': NVIDIA Optimus supported.')
+        if executable == 'mate-optimus-applet':
+            Indicator()
+            Gtk.main()
+        elif executable == 'offload-glx' or executable == 'offload-vulkan':
+            if ('on-demand' in get_active_gpu()):
+                if check_capability('on-demand'):
+                    if executable == 'offload-glx':
+                        print(executable + ': NVIDIA On-Demand is enabled.')
+                        # TODO: GLX applications: __NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia glxinfo | grep vendor)
+                    elif executable == 'offload-vulkan':
+                        print(executable + ': NVIDIA On-Demand is enabled.')
+                        # TODO: Vulkan applications: __NV_PRIME_RENDER_OFFLOAD=1 vkcube
+                else:
+                    print(executable + ": NVIDIA On-Demand is enabled but the system doesn't appear to be compatible.")
+            else:
+                print(executable + ': NVIDIA On-Demand is not currently enabled.')
+                # TODO: Unmodified exec here
+        else:
+            print(executable + ': I have an identity crisis. Send help!')
     else:
-        print('Prime not supported.')
+        print(executable + ': NVIDIA Optimus is not supported.')
