@@ -113,7 +113,7 @@ def run_nvidia_settings(arg=None):
     subprocess.Popen(["nvidia-settings", "-page", "PRIME Profiles"])
 
 def session_logout():
-    current_desktop = os.environ.get("XDG_CURRENT_DESKTOP").lower()
+    current_desktop = os.environ.get("XDG_CURRENT_DESKTOP").lower().strip()
     if 'mate' in current_desktop:
         subprocess.Popen(["mate-session-save", "--logout"])
     elif 'xfce' in current_desktop:
