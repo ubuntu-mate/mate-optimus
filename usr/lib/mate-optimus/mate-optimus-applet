@@ -298,15 +298,20 @@ if __name__ == "__main__":
                 if check_capability('on-demand'):
                     if executable == 'offload-glx':
                         print(executable + ': NVIDIA On-Demand is enabled.')
-                        # TODO: GLX applications: __NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia glxinfo | grep vendor)
+                        returncode = offload_launch(executable, sys.argv[1:])
+                        sys.exit(returncode)
                     elif executable == 'offload-vulkan':
                         print(executable + ': NVIDIA On-Demand is enabled.')
-                        # TODO: Vulkan applications: __NV_PRIME_RENDER_OFFLOAD=1 vkcube
+                        returncode = offload_launch(executable, sys.argv[1:])
+                        sys.exit(returncode)
                 else:
                     print(executable + ": NVIDIA On-Demand is enabled but the system doesn't appear to be compatible.")
+                    returncode = offload_launch(None, sys.argv[1:])
+                    sys.exit(returncode)
             else:
                 print(executable + ': NVIDIA On-Demand is not currently enabled.')
-                # TODO: Unmodified exec here
+                returncode = offload_launch(None, sys.argv[1:])
+                sys.exit(returncode)
         else:
             print(executable + ': I have an identity crisis. Send help!')
     else:
