@@ -278,15 +278,15 @@ def offload_launch(mode='', command=['']):
     else:
         print(mode + ': Launching "' + command_str +'" with no offload.')
 
-    # Spawn the process in the users default sheel using the modified environment
-    returncode = subprocess.call(command_str, env=offload_env, shell=True, executable=os.getenv('SHELL', '/bin/sh'))
-    return returncode
+    # Spawn the process in the users default shell using the modified environment
+    offload = subprocess.Popen(command_str, env=offload_env, shell=True, executable=os.getenv('SHELL', '/bin/sh'))
+    offload.wait()
+    return offload.returncode
 
 if __name__ == "__main__":
     executable = os.path.basename(__file__)
     setproctitle.setproctitle(executable)
     print(executable + ': launched.')
-
 
     if (prime_capable() and has_nvidia_settings()) or forced:
         print(executable + ': NVIDIA Optimus supported.')
