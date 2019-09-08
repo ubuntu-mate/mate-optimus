@@ -52,7 +52,9 @@ def nvidia_detected():
     # If we're check for nvidia let's make real sure we have an nvidia GPU.
     nvidia_detector = subprocess.Popen(['nvidia-detector'], stdout=PIPE, stderr=DEVNULL)
     out, err = nvidia_detector.communicate()
-    if 'None' in out.decode('utf-8'):
+    driver = out.decode('utf-8').strip()
+    print('nvidia-detector: ' + driver)
+    if driver == 'None':
         return False
     else:
         return True
