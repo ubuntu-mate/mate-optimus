@@ -86,7 +86,7 @@ def has_gpu_screen(capability):
 
 def gpu_loaded(gpu):
     # Does prime-switch report that the GPU is available?
-    if gpu == 'intel' or gpu == 'nvidia' or gpu == 'amdgpu' or gpu == 'radeon':
+    if gpu == 'intel' or gpu == 'amdgpu' or gpu == 'radeon':
         gpu_loaded = gpu + ' loaded? yes'
         prime_switch = subprocess.Popen(['prime-switch', '-help'], stdout=PIPE, stderr=DEVNULL)
         for line in prime_switch.stdout.readlines():
