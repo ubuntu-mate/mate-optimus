@@ -149,8 +149,10 @@ def session_logout():
     current_desktop = os.environ.get("XDG_CURRENT_DESKTOP").lower().strip()
     if current_desktop.startswith('mate'):
         subprocess.Popen(["mate-session-save", "--logout-dialog", "--gui"])
-    elif current_desktop.startswith('budgie') or current_desktop.startswith('gnome'):
-        subprocess.Popen(["gnome-session-quit", "--logout"])
+    elif current_desktop.startswith('budgie'):
+        subprocess.Popen(["gnome-session-quit", "--logout", "--no-prompt"])
+    elif current_desktop.startswith('gnome'):
+         subprocess.Popen(["gnome-session-quit", "--logout"])
     elif current_desktop.startswith('kde'):
         subprocess.Popen(["qdbus", "org.kde.ksmserver", "/KSMServer", "logout", "0", "0", "0"])
     elif current_desktop.startswith('lxqt'):
