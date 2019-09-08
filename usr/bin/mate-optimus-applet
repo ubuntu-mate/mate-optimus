@@ -98,7 +98,7 @@ def check_capability(capability):
     return capable
 
 def confirm_ignore(*args):
-  return Gtk.ResponseType.CANCEL
+    return Gtk.ResponseType.CANCEL
 
 def confirm_gpu_switch(gpu):
     message = _('Do you want to switch GPU now?') + ' ' + _('You need to log out and then log back in to switch the GPU to') + ' ' + gpu
