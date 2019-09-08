@@ -59,8 +59,8 @@ def nvidia_detected(capability):
         # If we're check for nvidia let's make real sure we have an nvidia GPU.
         nvidia_detector = subprocess.Popen(['nvidia-detector'], stdout=PIPE, stderr=DEVNULL)
         out, err = nvidia_detector.communicate()
-        driver = out.decode('utf-8').strip()
-        if driver == 'None':
+        driver = out.decode('utf-8').lower().strip()
+        if driver == 'none':
             print('  - nvidia-detector: None')
             return False
         else:
@@ -121,10 +121,10 @@ def check_capability(capability):
        nvidia_detected(capability) and \
        prime_select_features(capability) and \
        has_gpu_screen(capability):
-        print('  - ' + capability + ': is supported') 
+        print('  - ' + capability + ': is supported')
         return True
     else:
-        print('  - ' + capability + ': is not supported') 
+        print('  - ' + capability + ': is not supported')
         return False
 
 def confirm_ignore(*args):
