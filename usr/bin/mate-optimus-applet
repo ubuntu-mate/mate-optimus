@@ -55,8 +55,18 @@ def nvidia_detected():
     driver = out.decode('utf-8').strip()
     print('nvidia-detector: ' + driver)
     if driver == 'None':
+def has_gpu_screen(capability):
+    if capability == 'on-demand':
+        providers = subprocess.Popen(['xrandr', '--listproviders'], stdout=PIPE, stderr=DEVNULL)
+        for line in providers.stdout.readlines():
+            text = line.rstrip().decode('utf-8')
+            if 'name:NVIDIA-G' in text:
+                print('  - xrandr: NVIDIA GPU screen detected.')
+                return True
+        print('  - xrandr: NVIDIA GPU screen not detected.')
         return False
     else:
+        print('  - xrandr: NVIDIA GPU screen check skipped.')
         return True
 
 def gpu_loaded(gpu):
