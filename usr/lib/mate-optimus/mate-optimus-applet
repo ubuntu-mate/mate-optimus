@@ -247,6 +247,9 @@ class Indicator:
 if __name__ == "__main__":
     setproctitle.setproctitle('mate-optimus')
 
+    # Vulkan applications: __NV_PRIME_RENDER_OFFLOAD=1 vkcube
+    # GLX applications: __NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia glxinfo | grep vendor).
+
     if (prime_capable() and has_nvidia_settings()) or forced:
         print('Prime supported.')
         Indicator()
