@@ -117,7 +117,7 @@ def session_logout():
     if current_desktop.startswith('mate'):
         subprocess.Popen(["mate-session-save", "--logout-dialog", "--gui"])
     elif current_desktop.startswith('budgie'):
-        subprocess.Popen(["budgie-session", "--logout"])
+        subprocess.Popen(["gnome-session-quit", "--logout"])
     elif current_desktop.startswith('gnome'):
         subprocess.Popen(["gnome-session-quit", "--logout"])
     elif current_desktop.startswith('kde'):
