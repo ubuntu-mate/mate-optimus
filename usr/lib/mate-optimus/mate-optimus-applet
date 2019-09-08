@@ -250,6 +250,38 @@ class Indicator:
     def terminate(self, window = None, data = None):
         Gtk.main_quit()
 
+def offload_launch(mode='', command=['']):
+    # Make sure mode is sane.
+    if mode != 'offload-glx' and mode != 'offload-vulkan':
+        mode = 'offload-none'
+
+    # Validate the command we've be passed.
+    if isinstance(command, list):
+        command_str = ' '.join(command)
+    else:
+        command_str = ''
+
+    if not len(command_str):
+        print(mode + ': No command given, doing nothing.')
+        return 1
+
+    # Copy the environment so we don't pollute it.
+    offload_env = os.environ.copy()
+
+    if mode == 'offload-glx':
+        offload_env["__NV_PRIME_RENDER_OFFLOAD"] = "1"
+        offload_env["__GLX_VENDOR_LIBRARY_NAME"] = "nvidia"
+        print(mode + ': Launching "' + command_str + '" with NVIDIA offload.')
+    elif mode == 'offload-vulkan':
+        offload_env["__NV_PRIME_RENDER_OFFLOAD"] = "1"
+        print(mode + ': Launching "' + command_str + '" with NVIDIA offload.')
+    else:
+        print(mode + ': Launching "' + command_str +'" with no offload.')
+
+    # Spawn the process in the users default sheel using the modified environment
+    returncode = subprocess.call(command_str, env=offload_env, shell=True, executable=os.getenv('SHELL', '/bin/sh'))
+    return returncode
+
 if __name__ == "__main__":
     executable = os.path.basename(__file__)
     setproctitle.setproctitle(executable)
