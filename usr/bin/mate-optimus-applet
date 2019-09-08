@@ -24,7 +24,7 @@ __VERSION__ = '19.10.3'
 
 # i18n
 gettext.install("mate-optimus", "/usr/share/locale")
-forced = False
+skip_prime_support = False
 
 def get_active_gpu():
     process = subprocess.Popen(['prime-select', 'query'], stdout=PIPE)
@@ -41,8 +41,8 @@ def has_nvidia_settings():
         return False
 
 def prime_capable():
-    if forced:
-        print('  - prime-supported: Forced mode, skipping')
+    if skip_prime_support:
+        print('  - prime-supported: Skipping.')
         return True
 
     prime_supported = subprocess.Popen(['prime-supported'], stdout=PIPE, stderr=DEVNULL)
@@ -321,7 +321,7 @@ if __name__ == "__main__":
     setproctitle.setproctitle(executable)
     print(executable + ': launched.')
 
-    if (prime_capable() and has_nvidia_settings()) or forced:
+    if (prime_capable() and has_nvidia_settings()) or skip_prime_support:
         print(executable + ': NVIDIA Optimus supported.')
         if executable == 'mate-optimus-applet':
             Indicator()
