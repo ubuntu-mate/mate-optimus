@@ -121,8 +121,10 @@ def check_capability(capability):
        nvidia_detected(capability) and \
        prime_select_features(capability) and \
        has_gpu_screen(capability):
+        print('  - ' + capability + ': is supported') 
         return True
     else:
+        print('  - ' + capability + ': is not supported') 
         return False
 
 def confirm_ignore(*args):
