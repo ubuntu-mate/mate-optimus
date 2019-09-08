@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=NVIDIA Optimus
 Comment=NVIDIA Optimus GPU switcher
-Exec=/usr/lib/mate-optimus/mate-optimus-applet
+Exec=mate-optimus-applet
 Icon=optimus-indicator-unknown
 Terminal=false
 Type=Application
