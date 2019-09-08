@@ -20,7 +20,7 @@ from gi.repository import Notify
 gi.require_version('AppIndicator3', '0.1')
 from gi.repository import AppIndicator3
 
-__VERSION__ = '19.10.2'
+__VERSION__ = '19.10.3'
 
 # i18n
 gettext.install("mate-optimus", "/usr/share/locale")
