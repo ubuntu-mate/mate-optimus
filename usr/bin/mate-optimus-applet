@@ -34,27 +34,42 @@ def get_active_gpu():
 def has_nvidia_settings():
     # If NVIDIA Prime is not installed or isn't supported then exit.
     if (os.path.exists("/usr/bin/nvidia-settings") and os.path.exists("/usr/bin/prime-select")):
-        print('nvidia-settings and prime-select detected.')
+        print('  - nvidia-settings and prime-select detected.')
         return True
     else:
-        print('nvidia-settings and prime-select not detected.')
+        print('  - nvidia-settings and prime-select not detected.')
         return False
 
 def prime_capable():
+    if forced:
+        print('  - prime-supported: Forced mode, skipping')
+        return True
+
     prime_supported = subprocess.Popen(['prime-supported'], stdout=PIPE, stderr=DEVNULL)
     out, err = prime_supported.communicate()
     if 'yes' in out.decode('utf-8'):
+        print('  - prime-supported: Yes')
         return True
     else:
+        print('  - prime-supported: No')
         return False
 
-def nvidia_detected():
-    # If we're check for nvidia let's make real sure we have an nvidia GPU.
-    nvidia_detector = subprocess.Popen(['nvidia-detector'], stdout=PIPE, stderr=DEVNULL)
-    out, err = nvidia_detector.communicate()
-    driver = out.decode('utf-8').strip()
-    print('nvidia-detector: ' + driver)
-    if driver == 'None':
+def nvidia_detected(capability):
+    if capability == 'nvidia' or capability == 'on-demand':
+        # If we're check for nvidia let's make real sure we have an nvidia GPU.
+        nvidia_detector = subprocess.Popen(['nvidia-detector'], stdout=PIPE, stderr=DEVNULL)
+        out, err = nvidia_detector.communicate()
+        driver = out.decode('utf-8').strip()
+        if driver == 'None':
+            print('  - nvidia-detector: None')
+            return False
+        else:
+            print('  - nvidia-detector: ' + driver)
+            return True
+    else:
+        print('  - nvidia-detector: Skipped')
+        return True
+
 def has_gpu_screen(capability):
     if capability == 'on-demand':
         providers = subprocess.Popen(['xrandr', '--listproviders'], stdout=PIPE, stderr=DEVNULL)
@@ -77,37 +92,38 @@ def gpu_loaded(gpu):
         for line in prime_switch.stdout.readlines():
             text = line.rstrip().decode('utf-8')
             if gpu_loaded in text:
+                print('  - ' + gpu + ' loaded: Yes')
                 return True
+        print('  - ' + gpu + ' loaded: No')
         return False
     else:
+        print('  - ' + gpu + ' loaded: n/a')
         return True
 
-def check_capability(capability):
-    # Some other things to check for a compliant system here:
-    #  * https://download.nvidia.com/XFree86/Linux-x86_64/435.21/README/primerenderoffload.html
-
-    capable = gpu_loaded(capability)
-    print(capability + ' loaded: ' + str(capable))
-
-    if not forced:
-        capable = capable and prime_capable()
-        print(capability + ' prime-supported: ' + str(capable))
-
-    if capability == 'nvidia' or capability == 'on-demand':
-        capable = capable and nvidia_detected()
-        print(capability + ' nvidia detected: ' + str(capable))
-
+def prime_select_features(capability):
     # prime-select outputs to stderr
     prime_select = subprocess.Popen(['prime-select'], stdout=PIPE, stderr=PIPE)
     out, err = prime_select.communicate()
     if capability in err.decode('utf-8'):
-        capable = capable and True
+        print('  - prime-select: ' + capability + ' detected.')
+        return True
     else:
-        capable = capable and False
-    print(capability + ' prime-select: ' + str(capable))
-    
-    print(capability + ': ' + str(capable))
-    return capable
+        print('  - prime-select: ' + capability + ' not detected.')
+        return False
+
+def check_capability(capability):
+    print('Checking: ' + capability)
+    # Some other things to check for a compliant system here:
+    #  * https://download.nvidia.com/XFree86/Linux-x86_64/435.21/README/primerenderoffload.html
+
+    if gpu_loaded(capability) and \
+       prime_capable() and \
+       nvidia_detected(capability) and \
+       prime_select_features(capability) and \
+       has_gpu_screen(capability):
+        return True
+    else:
+        return False
 
 def confirm_ignore(*args):
     return Gtk.ResponseType.CANCEL
