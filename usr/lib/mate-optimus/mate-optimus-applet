@@ -252,8 +252,9 @@ class Indicator:
 
 if __name__ == "__main__":
     executable = os.path.basename(__file__)
-    print(executable + ': launched.')
     setproctitle.setproctitle(executable)
+    print(executable + ': launched.')
+
 
     if (prime_capable() and has_nvidia_settings()) or forced:
         print(executable + ': NVIDIA Optimus supported.')
