@@ -71,6 +71,9 @@ def gpu_loaded(gpu):
         return True
 
 def check_capability(capability):
+    # Some other things to check for a compliant system here:
+    #  * https://download.nvidia.com/XFree86/Linux-x86_64/435.21/README/primerenderoffload.html
+
     capable = gpu_loaded(capability)
     print(capability + ' loaded: ' + str(capable))
 
