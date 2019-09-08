@@ -126,6 +126,8 @@ def session_logout():
         subprocess.Popen(["gnome-session-quit", "--logout", "--no-prompt"])
     elif 'kde' in current_desktop:
         subprocess.Popen(["qdbus", "org.kde.ksmserver", "/KSMServer", "logout", "0", "0", "0"])
+    elif 'lxqt' in current_desktop:
+        subprocess.Popen(["lxqt-leave", "--logout"])
     else:
         pass
 
