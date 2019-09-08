@@ -116,10 +116,6 @@ def session_logout():
     current_desktop = os.environ.get("XDG_CURRENT_DESKTOP").lower().strip()
     if current_desktop.startswith('mate'):
         subprocess.Popen(["mate-session-save", "--logout"])
-    elif current_desktop.startswith('xfce'):
-        subprocess.Popen(["xfce4-session-logout", "--logout"])
-    elif current_desktop.startswith('x-cinnamon'):
-        subprocess.Popen(["cinnamon-session-quit", "--logout", "--no-prompt"])
     elif current_desktop.startswith('budgie'):
         subprocess.Popen(["budgie-session", "--logout"])
     elif current_desktop.startswith('gnome'):
@@ -128,6 +124,10 @@ def session_logout():
         subprocess.Popen(["qdbus", "org.kde.ksmserver", "/KSMServer", "logout", "0", "0", "0"])
     elif current_desktop.startswith('lxqt'):
         subprocess.Popen(["lxqt-leave", "--logout"])
+    elif current_desktop.startswith('x-cinnamon'):
+        subprocess.Popen(["cinnamon-session-quit", "--logout", "--no-prompt"])
+    elif current_desktop.startswith('xfce'):
+        subprocess.Popen(["xfce4-session-logout", "--logout"])
     else:
         pass
 
