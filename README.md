@@ -18,6 +18,12 @@
 sudo apt install mate-optimus
 ```
 
+### Fedora
+
+```bash
+sudo dnf install mate-optimus
+```
+
 ### Source
 
 You'll need the following dependencies:
