@@ -321,7 +321,7 @@ if __name__ == "__main__":
     setproctitle.setproctitle(executable)
     print(executable + ': launched.')
 
-    if (prime_capable() and has_nvidia_settings()) or skip_prime_support:
+    if (has_nvidia_settings() and prime_capable()) or skip_prime_support:
         print(executable + ': NVIDIA Optimus supported.')
         if executable == 'mate-optimus-applet':
             Indicator()
