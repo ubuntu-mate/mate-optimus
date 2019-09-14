@@ -269,8 +269,8 @@ class Indicator:
         about.set_authors(["Martin Wimpress", "Clement Lefebvre"])
         about.set_copyright('© 2015-2019 Ubuntu MATE Team')
         about.set_comments("NVIDIA Optimus GPU switcher.")
-        about.set_website("https://ubuntu-mate.org")
-        about.set_website_label("https://ubuntu-mate.org")
+        about.set_website("https://github.com/ubuntu-mate/mate-optimus")
+        about.set_website_label("https://github.com/ubuntu-mate/mate-optimus")
         about.set_license_type(Gtk.License.GPL_3_0)
         try:
             about.set_logo(GdkPixbuf.Pixbuf.new_from_file_at_size(os.path.join('usr', 'share', 'pixmaps', 'optimus-indicator-nvidia.svg'), 64, 64))
