@@ -10,7 +10,7 @@
 
 <p align="center">Made with 💝 for <img src="https://raw.githubusercontent.com/anythingcodes/slack-emoji-for-techies/gh-pages/emoji/tux.png" align="top" width="24" /></p>
 
-## Building, Testing, and Installation
+## Installation
 
 ### Ubuntu
 
@@ -23,6 +23,22 @@ sudo apt install mate-optimus
 ```bash
 sudo dnf install mate-optimus
 ```
+
+## Configuration
+
+The MATE Optimus indicator will not appear unless you have a compatible system
+and the appropriate drivers are installed. In the case of using NVIDIA
+On-Demand (known as PRIME Render Offload) you will require the NVIDA 435
+drivers and a GPU screen configured. See [Chapter 35. PRIME Render Offload](https://download.nvidia.com/XFree86/Linux-x86_64/435.21/README/primerenderoffload.html)
+from the NVIDIA Installation and Configuration Instructions for more details.
+
+Wrappers, called `offload-glx` & `offload-vulkan` can be used to easily offload
+games and applications to the PRIME renderer. For example:
+
+    offload-glx glmark2
+    offload-vulkan vkcube
+
+## Building & Testing
 
 ### Source
 
