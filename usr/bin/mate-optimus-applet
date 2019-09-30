@@ -26,6 +26,10 @@ __VERSION__ = '19.10.4'
 gettext.install("mate-optimus", "/usr/share/locale")
 skip_prime_support = False
 
+def force_composition_pipeline(state="Off"):
+    #nvidia-settings --assign CurrentMetaMode="$(nvidia-settings -q CurrentMetaMode -t|tr '\n' ' '|sed -e 's/.*:: \(.*\)/\1\n/g' -e 's/}/, ForceCompositionPipeline = On}/g')"
+    pass
+
 def get_active_gpu():
     process = subprocess.Popen(['prime-select', 'query'], stdout=PIPE)
     out, err = process.communicate()
