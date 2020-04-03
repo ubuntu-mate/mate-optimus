@@ -74,20 +74,6 @@ def nvidia_detected(capability):
         print('  - nvidia-detector: Skipped')
         return True
 
-def has_gpu_screen(capability):
-    if capability == 'on-demand':
-        providers = subprocess.Popen(['xrandr', '--listproviders'], stdout=PIPE, stderr=DEVNULL)
-        for line in providers.stdout.readlines():
-            text = line.rstrip().decode('utf-8')
-            if 'name:NVIDIA-G' in text:
-                print('  - xrandr: NVIDIA GPU screen detected.')
-                return True
-        print('  - xrandr: NVIDIA GPU screen not detected.')
-        return False
-    else:
-        print('  - xrandr: NVIDIA GPU screen check skipped.')
-        return True
-
 def gpu_loaded(gpu):
     # Does prime-switch report that the GPU is available?
     if gpu == 'intel' or gpu == 'amdgpu' or gpu == 'radeon':
@@ -123,8 +109,7 @@ def check_capability(capability):
     if gpu_loaded(capability) and \
        prime_capable() and \
        nvidia_detected(capability) and \
-       prime_select_features(capability) and \
-       has_gpu_screen(capability):
+       prime_select_features(capability):
         print('  - ' + capability + ': is supported')
         return True
     else:
