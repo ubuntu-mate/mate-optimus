@@ -272,36 +272,34 @@ class Indicator:
     def terminate(self, window = None, data = None):
         Gtk.main_quit()
 
-def offload_launch(mode='', command=['']):
+def offload_launch(mode='', command=[]):
     # Make sure mode is sane.
     if mode != 'offload-glx' and mode != 'offload-vulkan':
         mode = 'offload-none'
 
-    # Validate the command we've be passed.
-    if isinstance(command, list):
-        command_str = ' '.join(command)
-    else:
-        command_str = ''
-
-    if not len(command_str):
+    # Validate the command
+    assert isinstance(command, list), "Expected a list as 'command' argument"
+    if len(command) == 0:
         print(mode + ': No command given, doing nothing.')
         return 1
 
     # Copy the environment so we don't pollute it.
     offload_env = os.environ.copy()
 
+    # Modify the environment to enable offload, see
+    # https://download.nvidia.com/XFree86/Linux-x86_64/435.21/README/primerenderoffload.html
     if mode == 'offload-glx':
         offload_env["__NV_PRIME_RENDER_OFFLOAD"] = "1"
         offload_env["__GLX_VENDOR_LIBRARY_NAME"] = "nvidia"
-        print(mode + ': Launching "' + command_str + '" with NVIDIA offload.')
+        print(mode + ': Launching ' + str(command) + ' with NVIDIA offload.')
     elif mode == 'offload-vulkan':
         offload_env["__NV_PRIME_RENDER_OFFLOAD"] = "1"
-        print(mode + ': Launching "' + command_str + '" with NVIDIA offload.')
+        print(mode + ': Launching ' + str(command) + ' with NVIDIA offload.')
     else:
-        print(mode + ': Launching "' + command_str +'" with no offload.')
+        print(mode + ': Launching ' + str(command) + ' with no offload.')
 
-    # Spawn the process in the users default shell using the modified environment
-    offload = subprocess.Popen(command_str, env=offload_env, shell=True, executable=os.getenv('SHELL', '/bin/sh'))
+    # Spawn the process with the modified environment
+    offload = subprocess.Popen(command, env=offload_env)
     offload.wait()
     return offload.returncode
 
