@@ -302,10 +302,11 @@ def offload_launch(mode='', command=[]):
         # Exec the process replacing the current one (the call will not return).
         # Note that the argument list 'command' needs to include 'command[0]'.
         os.execvpe(command[0], command, offload_env)
-        return 0
     except FileNotFoundError:
         print("{}: {}: command not found".format(mode, command[0]))
         return 127
+
+    return 0
 
 if __name__ == "__main__":
     executable = os.path.basename(__file__)
