@@ -298,10 +298,9 @@ def offload_launch(mode='', command=[]):
     else:
         print(mode + ': Launching ' + str(command) + ' with no offload.')
 
-    # Spawn the process with the modified environment
-    offload = subprocess.Popen(command, env=offload_env)
-    offload.wait()
-    return offload.returncode
+    # Exec the process replacing the current one (the call will not return).
+    # Note that the argument list 'command' needs to include 'command[0]'.
+    os.execvpe(command[0], command, offload_env)
 
 if __name__ == "__main__":
     executable = os.path.basename(__file__)
