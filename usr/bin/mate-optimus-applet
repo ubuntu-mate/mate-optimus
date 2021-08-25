@@ -22,6 +22,12 @@ except:
     setproctitle = None
 
 try:
+    import dbus
+    bus = dbus.SystemBus()
+except:
+    bus = None
+
+try:
     gi.require_version('AyatanaAppIndicator3', '0.1')
     from gi.repository import AyatanaAppIndicator3 as AppIndicator3
 except:
@@ -48,12 +54,23 @@ def has_asusd_active():
 
 def get_active_gpu():
     if has_asusctl():
-        process = subprocess.Popen(['asusctl', 'graphics', '-g'], stdout=PIPE)
-        out, err = process.communicate()
-        value = out.decode('utf-8').split(':')[1].strip()
-        return {
-            'hybrid': 'on-demand',
-        }.get(value, value)
+        if bus:
+            gfx = bus.get_object('org.asuslinux.Daemon', '/org/asuslinux/Gfx')
+            vendor = gfx.Vendor(dbus_interface='org.asuslinux.Daemon')
+            return (
+                'nvidia',
+                'integrated',
+                'compute',
+                'vfio',
+                'on-demand',
+            )[vendor]
+        else:
+            process = subprocess.Popen(['asusctl', 'graphics', '-g'], stdout=PIPE)
+            out, err = process.communicate()
+            value = out.decode('utf-8').split(':')[1].strip()
+            return {
+                'hybrid': 'on-demand',
+            }.get(value, value)
 
     process = subprocess.Popen(['prime-select', 'query'], stdout=PIPE)
     out, err = process.communicate()
@@ -338,7 +355,11 @@ class Indicator:
                 response = confirm_gpu_switch(_("Intel (Power Saving)"))
             if response != Gtk.ResponseType.CANCEL:
                 if has_asusctl():
-                    subprocess.call(["asusctl", "graphics", "-m", "integrated"])
+                    if bus:
+                        gfx = bus.get_object('org.asuslinux.Daemon', '/org/asuslinux/Gfx')
+                        gfx.SetVendor(1, dbus_interface='org.asuslinux.Daemon')
+                    else:
+                        subprocess.call(["asusctl", "graphics", "-m", "integrated"])
                 else:
                     subprocess.call(["pkexec", "prime-select", "intel"])
                 if need_logout:
@@ -350,7 +371,11 @@ class Indicator:
                 response = confirm_gpu_switch(_("Integrated (Power Saving)"))
             if response != Gtk.ResponseType.CANCEL:
                 if has_asusctl():
-                    subprocess.call(["asusctl", "graphics", "-m", "integrated"])
+                    if bus:
+                        gfx = bus.get_object('org.asuslinux.Daemon', '/org/asuslinux/Gfx')
+                        gfx.SetVendor(1, dbus_interface='org.asuslinux.Daemon')
+                    else:
+                        subprocess.call(["asusctl", "graphics", "-m", "integrated"])
                 else:
                     subprocess.call(["pkexec", "prime-select", "intel"])
                 if need_logout:
@@ -362,7 +387,11 @@ class Indicator:
                 response = confirm_gpu_switch(_("Integrated (VFIO)"))
             if response != Gtk.ResponseType.CANCEL:
                 if has_asusctl():
-                    subprocess.call(["asusctl", "graphics", "-m", "vfio"])
+                    if bus:
+                        gfx = bus.get_object('org.asuslinux.Daemon', '/org/asuslinux/Gfx')
+                        gfx.SetVendor(3, dbus_interface='org.asuslinux.Daemon')
+                    else:
+                        subprocess.call(["asusctl", "graphics", "-m", "vfio"])
                 else:
                     subprocess.call(["pkexec", "prime-select", "intel"])
                 if need_logout:
@@ -374,7 +403,11 @@ class Indicator:
                 response = confirm_gpu_switch(_("NVIDIA (Performance Mode)"))
             if response != Gtk.ResponseType.CANCEL:
                 if has_asusctl():
-                    subprocess.call(["asusctl", "graphics", "-m", "nvidia"])
+                    if bus:
+                        gfx = bus.get_object('org.asuslinux.Daemon', '/org/asuslinux/Gfx')
+                        gfx.SetVendor(0, dbus_interface='org.asuslinux.Daemon')
+                    else:
+                        subprocess.call(["asusctl", "graphics", "-m", "nvidia"])
                 else:
                     subprocess.call(["pkexec", "prime-select", "nvidia"])
                 if need_logout:
@@ -386,7 +419,11 @@ class Indicator:
                 response = confirm_gpu_switch(_("NVIDIA (On-Demand)"))
             if response != Gtk.ResponseType.CANCEL:
                 if has_asusctl():
-                    subprocess.call(["asusctl", "graphics", "-m", "hybrid"])
+                    if bus:
+                        gfx = bus.get_object('org.asuslinux.Daemon', '/org/asuslinux/Gfx')
+                        gfx.SetVendor(4, dbus_interface='org.asuslinux.Daemon')
+                    else:
+                        subprocess.call(["asusctl", "graphics", "-m", "hybrid"])
                 else:
                     subprocess.call(["pkexec", "prime-select", "on-demand"])
                 if need_logout:
