@@ -24,7 +24,7 @@ except:
     gi.require_version('AppIndicator3', '0.1')
     from gi.repository import AppIndicator3
 
-__VERSION__ = '20.10.0'
+__VERSION__ = '21.04.0'
 
 # i18n
 gettext.install("mate-optimus", "/usr/share/locale")
